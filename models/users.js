@@ -1,6 +1,7 @@
 'use strict'
 
-const CryptoJS = require('react-native-crypto-js')
+//const CryptoJS = require('crypto-js')
+//const CryptoJS = require('react-native-crypto-js')
 
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define(
@@ -20,19 +21,18 @@ module.exports = (sequelize, DataTypes) => {
     {
       hooks: {
         beforeCreate: (data, option) => {
-          const secretKey = '#_secret!@#%'
-          var salt = CryptoJS.lib.WordArray.random(128 / 8)
-          var pbk = CryptoJS.PBKDF2(secretKey, salt, { keySize: 512 / 32, iterations: 100000 })
-          var encrypt = CryptoJS.AES.encrypt(data.password, pbk)
-          data.password = encrypt
+          const salt = '#_secret!@#%'
+          //var salt = CryptoJS.lib.WordArray.random(128 / 8)
+          //var pbk = CryptoJS.PBKDF2(data.password, salt, { keySize: 256 / 32, iterations: 100000 })
         },
         beforeFind: (data, option) => {
+          console.log('data',data.where.password)
           if (data.where.password) {
-            const secretKey = '#_secret!@#%'
-            var salt = CryptoJS.lib.WordArray.random(128 / 8)
-            var pbk = CryptoJS.PBKDF2(secretKey, salt, { keySize: 512 / 32, iterations: 100000 })
-            var encrypt = CryptoJS.AES.encrypt(data.where.password, pbk)
-            data.where.password = encrypt
+            const salt = '#_secret!@#%'
+            //var salt = CryptoJS.lib.WordArray.random(128 / 8)
+            //var pbk = CryptoJS.PBKDF2(data.where.password, salt, { keySize: 256 / 32, iterations: 100000 })
+            //var encrypt = CryptoJS.AES.encrypt(data.defaults.password, pbk);
+            //data.where.password = JSON.stringify(pbk)
           }
         }
       }
