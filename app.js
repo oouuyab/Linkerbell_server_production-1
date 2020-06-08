@@ -6,7 +6,9 @@ const cors = require('cors')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
-// const usersRouter = require('./routes/users')
+const morgan = require('morgan');
+
+const usersRouter = require('./routes/users')
 //const linksRouter = require('./routes/links')
 
 app.use(
@@ -25,19 +27,23 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(
   cors({
-    origin: ['http://localhost:7000'],
+    origin: ['http://13.125.223.179:7000'],
     methods: ['GET', 'POST'],
     credentials: true
   })
 )
 
+app.use(morgan('dev'));
+
 app.get('/', function (req, res) {
   res.send('Hello World')
 })
 
-// app.use('/users', usersRouter)
+app.use('/users', usersRouter)
 //app.use('/links', linksRouter)
 
 app.listen(7000, function () {
   console.log('Example app listening on port!')
 })
+
+module.exports = app;
