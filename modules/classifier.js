@@ -19,6 +19,7 @@ const analyzeParams = {
     },
   },
 };
+x;
 
 naturalLanguageUnderstanding
   .analyze(analyzeParams)
