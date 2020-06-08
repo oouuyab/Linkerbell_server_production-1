@@ -4,8 +4,14 @@ module.exports = (sequelize, DataTypes) => {
   const url_category = sequelize.define(
     'url_category',
     {
-      url_id: DataTypes.INTEGER,
-      category_id: DataTypes.INTEGER
+      url_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      }
     }
   )
   url_category.associate = function (models) {

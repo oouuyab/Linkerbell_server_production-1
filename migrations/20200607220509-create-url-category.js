@@ -11,6 +11,7 @@ module.exports = {
       url_id: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
+        allowNull: false,
         references: {
           model: 'urls',
           key: 'id'
@@ -18,6 +19,7 @@ module.exports = {
       },
       category_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         onDelete: 'cascade',
         onUpdate: 'cascade',
         references: {

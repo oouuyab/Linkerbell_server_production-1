@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       url_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
@@ -17,6 +18,7 @@ module.exports = {
         }
       },
       tag_name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
