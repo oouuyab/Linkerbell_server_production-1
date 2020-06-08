@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      tag_name: DataTypes.STRING
+      tag_name: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
     },
     {
       underscored: true
