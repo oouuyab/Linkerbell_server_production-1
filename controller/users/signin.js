@@ -1,4 +1,5 @@
 const { users } = require('../../models')
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   post: async (req, res) => {
@@ -10,16 +11,19 @@ module.exports = {
           email: email
         }
       })
-      .then(result => {
+      .then((result) => {
         if(result === null) {
           res.status(401).send('이메일이 일치하지 않습니다.')
-        } else if (result.password !== password) {
-          res.status(401).send('비밀번호가 일치하지 않습니다.')
-        } else {
-          sess.userid = result.id
-          res.status(200).json({
-            id: result.id
-          })
+         }
+          if (result.password) {
+            if (bcrypt.compareSync(password, result.password)) {
+              sess.userid = result.id
+              res.status(200).json({
+                id: result.id
+              })
+              } else {
+                res.status(401).send('비밀번호가 일치하지 않습니다.')
+              }
           }
       })
       .catch(err => {
