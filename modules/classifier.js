@@ -1,15 +1,16 @@
 const NaturalLanguageUnderstandingV1 = require("ibm-watson/natural-language-understanding/v1");
 const { IamAuthenticator } = require("ibm-watson/auth");
 const dotenv = require("dotenv").config();
+
 const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
   version: "2019-07-12",
   authenticator: new IamAuthenticator({
-    apikey: process.dotenv.WATSON_API_KEY,
+    apikey: process.env.WATSON_API_KEY,
   }),
-  url: process.dotenv.WATSON_URL,
+  url: process.env.WATSON_URL,
 });
 
-export const classifer = (url) => {
+const classifier = (url) => {
   const analyzeParams = {
     url: url,
     features: {
@@ -29,3 +30,5 @@ export const classifer = (url) => {
       console.log("error:", err);
     });
 };
+
+module.exports = classifier;

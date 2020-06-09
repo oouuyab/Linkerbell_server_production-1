@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 
-export const checkToken = (req, res) => {
+const checkToken = (req, res) => {
   const token_info = req.cookies.token;
   jwt.verify(token, process.env.JWTSECRETKEY, (error, decoded) => {
     if (err) {
@@ -12,3 +12,4 @@ export const checkToken = (req, res) => {
   });
   return token_info;
 };
+module.exports = checkToken;
