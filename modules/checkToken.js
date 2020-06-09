@@ -2,14 +2,16 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 
 const checkToken = (req, res) => {
-  const token_info = req.cookies.token;
-  jwt.verify(token, process.env.JWTSECRETKEY, (error, decoded) => {
-    if (err) {
-      return res.sendStatus(403);
+  //const decode = createCipher(req.coockies.token,process.env.CRYPTOSECRETKEY);
+  //const decodeResult = decode.update()
+  const token_info = jwt.verify(req.cookies.token, process.env.JWTSECRETKEY, (error, decoded) => {
+    if (error) {
+      return error;
     } else {
       return token;
     }
   });
+
   return token_info;
 };
 module.exports = checkToken;
