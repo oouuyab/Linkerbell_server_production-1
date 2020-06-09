@@ -1,7 +1,6 @@
 'use strict'
 
-//const CryptoJS = require('crypto-js')
-//const CryptoJS = require('react-native-crypto-js')
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define(
@@ -20,20 +19,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        beforeCreate: (data, option) => {
-          const salt = '#_secret!@#%'
-          //var salt = CryptoJS.lib.WordArray.random(128 / 8)
-          //var pbk = CryptoJS.PBKDF2(data.password, salt, { keySize: 256 / 32, iterations: 100000 })
-        },
-        beforeFind: (data, option) => {
-          console.log('data',data.where.password)
-          if (data.where.password) {
-            const salt = '#_secret!@#%'
-            //var salt = CryptoJS.lib.WordArray.random(128 / 8)
-            //var pbk = CryptoJS.PBKDF2(data.where.password, salt, { keySize: 256 / 32, iterations: 100000 })
-            //var encrypt = CryptoJS.AES.encrypt(data.defaults.password, pbk);
-            //data.where.password = JSON.stringify(pbk)
-          }
+        beforeCreate: async(data, option) => {
+          var salt = bcrypt.genSaltSync(10);
+          const hash = await bcrypt.hash(data.password, salt);
+          data.password = hash;
         }
       }
     }
