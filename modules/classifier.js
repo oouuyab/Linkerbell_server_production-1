@@ -19,16 +19,16 @@ const classifier = (url) => {
       },
     },
   };
-  x;
 
-  naturalLanguageUnderstanding
+  const result = naturalLanguageUnderstanding
     .analyze(analyzeParams)
     .then((analysisResults) => {
-      console.log(JSON.stringify(analysisResults, null, 2));
+      return JSON.stringify(analysisResults, null, 2);
     })
     .catch((err) => {
       console.log("error:", err);
     });
+  return result;
 };
 
 module.exports = classifier;
