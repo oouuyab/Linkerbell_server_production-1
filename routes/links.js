@@ -3,6 +3,7 @@ const router = express.Router()
 
 const { linksController } = require('../controller')
 
-router.post('/links', (function(){console.log('hello world')}))
+// router.get('/home', linksController.home.get)
+router.post('/:user_id', linksController.add_links.post)
 
 module.exports = router
