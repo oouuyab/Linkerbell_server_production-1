@@ -1,3 +1,4 @@
+
 const crypto = require('crypto');
 const env = require('dotenv').config();
 
@@ -9,4 +10,4 @@ const enToken = async (user_info) => {
   return token;
 };
 
-module.exports = enToken;
+module.exports = enToken

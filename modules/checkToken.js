@@ -1,3 +1,4 @@
+
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 
@@ -16,6 +17,6 @@ const checkToken = (req, res) => {
     }
   );
 
-  return token_info;
-};
-module.exports = checkToken;
+  return token_info
+}
+module.exports = checkToken

@@ -9,10 +9,8 @@ module.exports = {
           email: email,
         },
         defaults: {
-          password: password,
-          age: age,
-          gender: gender,
-        },
+          password: password
+        }
       })
       .then(async ([user, created]) => {
         if (!created) {
