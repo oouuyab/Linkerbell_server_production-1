@@ -9,6 +9,8 @@ router.post('/signout', usersController.signout.post);
 
 router.post('/signup', usersController.signup.post);
 
-router.put('/profile/:user_id', usersController.profile.put)
+router.put('/profile/:user_id', usersController.profile.put);
 
-module.exports = router
+router.post('/oauth', usersController.oauth.post);
+
+module.exports = router;
