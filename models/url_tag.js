@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = (sequelize, DataTypes) => {
   const url_tag = sequelize.define(
@@ -6,24 +6,24 @@ module.exports = (sequelize, DataTypes) => {
     {
       url_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       tag_name: {
         type: DataTypes.STRING,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     },
     {
-      underscored: true
+      underscored: true,
     }
-  )
+  );
   url_tag.associate = function (models) {
     url_tag.belongsTo(models.urls, {
       foreignKey: 'url_id',
       targetKey: 'id',
-      onDelete: 'cascade'
-    })
-  }
+      onDelete: 'cascade',
+    });
+  };
 
-  return url_tag
-}
+  return url_tag;
+};

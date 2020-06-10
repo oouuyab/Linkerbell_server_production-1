@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('url_category', {
@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       url_id: {
         type: Sequelize.INTEGER,
@@ -14,8 +14,8 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'urls',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       category_id: {
         type: Sequelize.INTEGER,
@@ -24,20 +24,20 @@ module.exports = {
         onUpdate: 'cascade',
         references: {
           model: 'categories',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
-    })
+        type: Sequelize.DATE,
+      },
+    });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('url__category')
-  }
-}
+    return queryInterface.dropTable('url__category');
+  },
+};

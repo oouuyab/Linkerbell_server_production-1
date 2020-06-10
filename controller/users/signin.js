@@ -1,6 +1,7 @@
-const { users } = require('../../models')
-const { addToken, checkToken, enToken } = require('../../modules')
-const bcrypt = require('bcryptjs')
+
+const { users } = require('../../models');
+const { addToken, checkToken, enToken } = require('../../modules');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   post: (req, res) => {
@@ -11,7 +12,7 @@ module.exports = {
         const token = enToken(req.cookies)
         res.status(256).json({ user_id: user_id, token: token })
       } else if (!req.cookies.session_id) {
-        res.status(404).end('로그인 해주세요!')
+        res.status(404).end('로그인 해주세요!');
       } else {
         res.status(404).end()
       }
@@ -25,7 +26,7 @@ module.exports = {
         })
         .then((result) => {
           if (result === null) {
-            res.status(401).send('이메일이 일치하지 않습니다.')
+            res.status(401).send('이메일이 일치하지 않습니다.');
           }
           if (result.password) {
             if (bcrypt.compareSync(password, result.password)) {
@@ -43,7 +44,8 @@ module.exports = {
                 })
                 .end()
             } else {
-              res.status(401).send('비밀번호가 일치하지 않습니다.')
+
+              res.status(401).send('비밀번호가 일치하지 않습니다.');
             }
           }
         })

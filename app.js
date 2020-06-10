@@ -1,3 +1,4 @@
+
 var express = require('express')
 var app = express()
 
@@ -28,10 +29,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(
   cors({
     origin: ['http://localhost:7000'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE','PUT'],
     credentials: true
   })
 )
+
 
 app.use(morgan('dev'))
 
@@ -55,11 +57,12 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', origin)
   }
   res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Methods', 'GET', 'POST', 'DELETE', 'PATCH')
+  res.setHeader('Access-Control-Allow-Methods', 'GET', 'POST', 'DELETE', 'PATCH','PUT')
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
   return next()
 })
 
 // category(classifier('https://oouuyab.github.io/til/14-React-element-rendering-copy/'))
+
 
 module.exports = app
