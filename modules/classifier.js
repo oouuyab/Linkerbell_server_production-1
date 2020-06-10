@@ -1,9 +1,9 @@
-const NaturalLanguageUnderstandingV1 = require("ibm-watson/natural-language-understanding/v1");
-const { IamAuthenticator } = require("ibm-watson/auth");
-const dotenv = require("dotenv").config();
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+const { IamAuthenticator } = require('ibm-watson/auth');
+const dotenv = require('dotenv').config();
 
 const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
-  version: "2019-07-12",
+  version: '2019-07-12',
   authenticator: new IamAuthenticator({
     apikey: process.env.WATSON_API_KEY,
   }),
@@ -26,7 +26,7 @@ const classifier = (url) => {
       return JSON.stringify(analysisResults, null, 2);
     })
     .catch((err) => {
-      console.log("error:", err);
+      console.log('error:', err);
     });
   return result;
 };

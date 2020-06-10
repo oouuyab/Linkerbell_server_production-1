@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('urls', {
@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -14,32 +14,32 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       url: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       favorite: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
       },
       isnew: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true
+        defaultValue: true,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
-    })
+        type: Sequelize.DATE,
+      },
+    });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('urls')
-  }
-}
+    return queryInterface.dropTable('urls');
+  },
+};

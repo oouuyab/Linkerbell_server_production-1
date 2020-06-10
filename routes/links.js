@@ -1,8 +1,10 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const { linksController } = require('../controller')
+const { linksController } = require('../controller');
 
-router.post('/links', (function(){console.log('hello world')}))
+router.post('/links', function () {
+  console.log('hello world');
+});
 
-module.exports = router
+module.exports = router;
