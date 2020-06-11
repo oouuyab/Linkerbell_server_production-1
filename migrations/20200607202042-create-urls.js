@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      category_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       favorite: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,

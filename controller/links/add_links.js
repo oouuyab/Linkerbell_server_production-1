@@ -1,12 +1,20 @@
 const { urls } = require('../../models');
+const { classifier } = require('../../modules');
 
 module.exports = {
-  post: (req, res) => {
+  post: async (req, res) => {
+    const category = async function () {
+      return classifier(req.body.url);
+    };
+    const result = await category();
     urls
       .findOrCreate({
         where: {
           user_id: req.params.user_id,
           url: req.body.url,
+        },
+        defaults: {
+          category_id: result,
         },
       })
       .then(async ([url, created]) => {

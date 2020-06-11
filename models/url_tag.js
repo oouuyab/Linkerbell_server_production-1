@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      tableName: 'url_tag',
+      freezeTableName: true,
       underscored: true,
     }
   );

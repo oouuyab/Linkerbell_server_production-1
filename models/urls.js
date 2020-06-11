@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    category_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     favorite: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
@@ -29,11 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       targetKey: 'id',
       onDelete: 'cascade',
-    });
-    urls.belongsToMany(models.categories, {
-      through: 'url_category',
-      foreignKey: 'url_id',
-      targetKey: 'id',
     });
   };
   return urls;
