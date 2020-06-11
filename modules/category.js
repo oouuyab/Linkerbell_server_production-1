@@ -1,6 +1,6 @@
 //const test = require('./testResult');
 
-const category = async (arr) => {
+const category = (arr) => {
   let newResult = [];
   for (let i = 0; i < arr.length; i++) {
     let newLabelResult = {};
@@ -8,7 +8,7 @@ const category = async (arr) => {
     newLabelResult.label = newLabel(arr[i].label);
     newResult.push(newLabelResult);
   }
-  console.log(newResult);
+  return newResult;
 };
 
 const newLabel = (label) => {
