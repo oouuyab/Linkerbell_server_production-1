@@ -9,15 +9,15 @@ module.exports = {
           email: email,
         },
         defaults: {
-          password: password
-        }
+          password: password,
+        },
       })
       .then(async ([user, created]) => {
         if (!created) {
-          return res.status(409).send('이미 존재하는 이메일주소 입니다.');
+          return res.status(409).send('이미 존재하는 이메일 주소입니다.');
         }
-        const data = await user.get({ plain: true });
-        res.status(201).json(data);
+        const data = user.get({ plain: true });
+        await res.status(201).json({ user_id: data.id });
       });
   },
 };
