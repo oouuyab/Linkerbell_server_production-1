@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: ['http://localhost:7000'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   })
 );
@@ -58,8 +58,7 @@ app.use((req, res, next) => {
     'GET',
     'POST',
     'DELETE',
-    'PATCH',
-    'PUT'
+    'PATCH'
   );
   res.setHeader(
     'Access-Control-Allow-Headers',

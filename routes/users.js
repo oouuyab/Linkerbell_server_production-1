@@ -9,7 +9,7 @@ router.post('/signout', usersController.signout.post);
 
 router.post('/signup', usersController.signup.post);
 
-router.put('/profile/:user_id', usersController.profile.put);
+router.patch('/profile', usersController.profile.patch);
 
 router.post('/oauth', usersController.oauth.post);
 

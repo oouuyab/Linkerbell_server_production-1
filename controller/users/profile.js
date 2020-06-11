@@ -1,8 +1,8 @@
 const { users } = require('../../models');
 
 module.exports = {
-  put: (req, res) => {
-    const { age, gender } = req.body;
+  patch: (req, res) => {
+    const { user_id, age, gender } = req.body;
     users
       .update(
         {
@@ -11,7 +11,7 @@ module.exports = {
         },
         {
           where: {
-            id: req.params.user_id,
+            id: user_id,
           },
         }
       )

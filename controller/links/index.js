@@ -1,4 +1,4 @@
 module.exports = {
-  //home: require('./home'),
+  list: require('./list'),
   add_links: require('./add_links'),
 };
