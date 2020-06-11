@@ -9,8 +9,6 @@ const morgan = require('morgan');
 const usersRouter = require('./routes/users');
 const linksRouter = require('./routes/links');
 
-const { classifier, category } = require('./modules');
-
 app.use(
   session({
     secret: '#linkerbell#',
@@ -69,8 +67,5 @@ app.use((req, res, next) => {
   );
   return next();
 });
-
-category();
-//   classifier('https://oouuyab.github.io/til/14-React-element-rendering-copy/')
 
 module.exports = app;

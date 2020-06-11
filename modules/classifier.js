@@ -11,7 +11,7 @@ const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
   url: process.env.WATSON_URL,
 });
 
-const classifier = (url) => {
+const classifier = async (url) => {
   const analyzeParams = {
     url: url,
     features: {
@@ -21,23 +21,18 @@ const classifier = (url) => {
     },
   };
 
-  const result = () => {
-    naturalLanguageUnderstanding.analyze(analyzeParams).then()
-    let analysisResults = await JSON.stringify(analyzed, null, 2);
-    let result = await analysisResults.result;
-    console.log(result);
+  const newClassifier = async () => {
+    let goNLU = await naturalLanguageUnderstanding.analyze(analyzeParams);
+    let analysisNLU = function () {
+      let analysis = goNLU.result.categories;
+      let result = category(analysis)[0].label;
+      return result;
+    };
+    let resultNLU = await analysisNLU();
+    return resultNLU;
   };
-  result();
-  // const result = naturalLanguageUnderstanding
-  //   .analyze(analyzeParams)
-  //   .then((analysisResults) => {
-  //     return JSON.stringify(analysisResults, null, 2)
-  //   })
-  //   .catch((err) => {
-
-  //     console.log('error:', err);
-  //   });
-  // return result;
+  let result = await newClassifier();
+  return result;
 };
 
 module.exports = classifier;
