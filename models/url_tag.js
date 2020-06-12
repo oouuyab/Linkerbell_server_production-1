@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'url_tag',
       freezeTableName: true,
-      underscored: true,
     }
   );
   url_tag.associate = function (models) {
