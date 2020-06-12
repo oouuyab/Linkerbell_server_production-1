@@ -1,8 +1,12 @@
 const { urls } = require('../../models');
 const { classifier } = require('../../modules');
-
+const { checkToken } = require('../../modules');
 module.exports = {
   post: async (req, res) => {
+    //! <------ 토큰 사용해서 user_id 가져옴 -----------
+    const token_info = checkToken(req);
+    const { user_id } = token_info;
+    //! ----------------------------------------->
     const category = async function () {
       return classifier(req.body.url);
     };
@@ -10,7 +14,7 @@ module.exports = {
     urls
       .findOrCreate({
         where: {
-          user_id: req.params.user_id,
+          user_id: user_id,
           url: req.body.url,
         },
         defaults: {
