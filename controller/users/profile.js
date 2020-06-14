@@ -1,10 +1,8 @@
 const { users } = require('../../models');
-const { checkToken } = require('../../modules');
+
 module.exports = {
   patch: (req, res) => {
-    const token_info = checkToken(req);
-    const { user_id } = token_info;
-    const { age, gender } = req.body;
+    const { age, gender, user_id } = req.body;
     users
       .update(
         {

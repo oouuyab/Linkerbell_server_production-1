@@ -7,6 +7,6 @@ let addToken = (result) => {
   let options = { expiresIn: '7d', issuer: 'Linkerbell', subject: 'userInfo' };
 
   userInfo.token = jwt.sign(userInfo, process.env.JWTSECRETKEY, options);
-  return userInfo;
+  return userInfo.token;
 };
 module.exports = addToken;

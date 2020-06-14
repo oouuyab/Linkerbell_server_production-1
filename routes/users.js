@@ -13,4 +13,6 @@ router.patch('/profile', usersController.profile.patch);
 
 router.post('/oauth', usersController.oauth.post);
 
+// router.post('/oauth_1', usersController.oauth_1.post);
+
 module.exports = router;
