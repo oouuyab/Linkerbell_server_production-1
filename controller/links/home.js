@@ -17,7 +17,7 @@ module.exports = {
         });
         const result = [];
         for (let el of urlArr) {
-          let value = {};
+          let value = { isnew: false };
           if (result.length === 0) {
             value.category_id = el.category_id;
             if (el.isnew === true) {
