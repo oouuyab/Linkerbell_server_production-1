@@ -29,4 +29,18 @@ module.exports = {
         res.status(201).json(data);
       });
   },
+  delete: (req, res) => {
+    urls
+      .destroy({
+        where: {
+          id: req.params.url_id,
+        },
+      })
+      .then((result) => {
+        if (!result) {
+          res.status(400).send('bad request');
+        }
+        res.status(201).send('삭제되었습니다.');
+      });
+  },
 };
