@@ -40,10 +40,10 @@ module.exports = {
               res
                 .status(200)
                 .cookie('session_id', req.session.id)
-                .cookie('token', user_info.token)
+                .cookie('token', user_info)
                 .json({
                   user_id: result.dataValues.id,
-                  token: user_info.token,
+                  token: user_info,
                 })
                 .end();
             } else {

@@ -5,4 +5,5 @@ module.exports = {
   category_list: require('./category_list'),
   tags: require('./tags'),
   favorite: require('./favorite'),
+  categories: require('./categories'),
 };
