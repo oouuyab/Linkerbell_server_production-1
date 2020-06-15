@@ -9,6 +9,7 @@ router.get('/home', linksController.home.get);
 router.get('/', linksController.all_list.get);
 router.patch('/tags', linksController.tags.patch);
 router.get('/category_list/:category_id', linksController.category_list.get);
-router.patch('/category_list', linksController.category_list.patch);
+router.patch('/categories', linksController.categories.patch);
 router.patch('/favorite', linksController.favorite.patch);
+
 module.exports = router;

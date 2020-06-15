@@ -24,7 +24,7 @@ module.exports = {
           res
             .status(200)
             .cookie('session_id', req.session.id)
-            .cookie('token', user_info.token)
+            .cookie('token', user_info)
             .json({
               user_id: data.id,
             });
@@ -35,7 +35,7 @@ module.exports = {
           res
             .status(201)
             .cookie('session_id', req.session.id)
-            .cookie('token', user_info.token)
+            .cookie('token', user_info)
             .json({
               user_id: user.dataValues.id,
             });

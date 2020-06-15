@@ -13,7 +13,7 @@ module.exports = {
         },
       });
       const getList = await utils.getListData(findUrls);
-
+      console.log(getList);
       const unflatted = await Promise.all(
         findUrls.map(async (list) => {
           const url_id = list.dataValues.id;
