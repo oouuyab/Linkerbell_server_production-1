@@ -19,6 +19,10 @@ module.exports = {
       const unflatted = await Promise.all(
         findUrls.map(async (list) => {
           const url_id = list.dataValues.id;
+          const isold = await urls.update(
+            { isnew: 0 },
+            { where: { id: url_id } }
+          );
           const tagList = await url_tag.findAll({ where: { url_id: url_id } });
           const tags = await tagList.map((list) => list.dataValues.tag_name);
           return tags;

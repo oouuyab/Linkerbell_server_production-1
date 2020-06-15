@@ -1,5 +1,7 @@
 const extract = require('meta-extractor');
 
+const { url_tag } = require('../models');
+
 exports.getListData = async (result) => {
   const list = await Promise.all(
     result.map(async (re) => {
@@ -11,7 +13,9 @@ exports.getListData = async (result) => {
         og_description:
           ext.ogDescription || ext.description || ext.twitterDescription,
       };
-      const data = { ...re.dataValues, ...og };
+      const findTags = await url_tag.findAll({ where: { url_id: re.id } });
+      const tags = await findTags.map((el) => el.dataValues.tag_name);
+      const data = { ...re.dataValues, ...og, tags };
       obj = { ...obj, ...data };
       return obj;
     })
