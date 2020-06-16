@@ -8,6 +8,7 @@ const development = {
   host: env.DB_HOST,
   dialect: env.DB_DIALECT,
   port: env.DB_PORT,
+  timezone: '+09:00',
 };
 
 const production = {
@@ -17,6 +18,7 @@ const production = {
   host: env.DB_HOST,
   dialect: env.DB_DIALECT,
   port: env.DB_PORT,
+  timezone: '+09:00',
 };
 
 const test = {
@@ -26,6 +28,7 @@ const test = {
   host: env.DB_HOST,
   dialect: env.DB_DIALECT,
   port: env.DB_PORT,
+  timezone: '+09:00',
 };
 
 module.exports = { development, production, test };

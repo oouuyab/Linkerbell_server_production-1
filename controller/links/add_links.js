@@ -1,16 +1,16 @@
 const { urls } = require('../../models');
 const { classifier } = require('../../modules');
 const { checkToken } = require('../../modules');
+const extract = require('meta-extractor');
 module.exports = {
   post: async (req, res) => {
-    //! <------ 토큰 사용해서 user_id 가져옴 -----------
     const token_info = checkToken(req);
     const { user_id } = token_info;
-    //! ----------------------------------------->
     const category = async function () {
       return classifier(req.body.url);
     };
     const result = await category();
+    const ext = await extract({ uri: req.body.url });
     urls
       .findOrCreate({
         where: {
@@ -19,6 +19,13 @@ module.exports = {
         },
         defaults: {
           category_id: result,
+          og_title: ext.ogTitle || ext.title || '',
+          og_image: ext.ogImage || ext.twitterImage || '',
+          og_description:
+            ext.ogDescription ||
+            ext.description ||
+            ext.twitterDescription ||
+            '',
         },
       })
       .then(async ([url, created]) => {

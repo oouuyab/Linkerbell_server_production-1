@@ -33,6 +33,18 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
       },
+      og_title: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      og_image: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      og_description: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

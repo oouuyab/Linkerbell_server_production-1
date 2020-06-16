@@ -31,6 +31,7 @@
     "meta-extractor": "^2.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
+    "puppeteer": "^4.0.0",
     "puppeteer-core": "^3.3.0",
     "sequelize": "^5.21.11"
   },

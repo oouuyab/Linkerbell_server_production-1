@@ -8,8 +8,8 @@ exports.getListData = async (result) => {
       var obj = {};
       const ext = await extract({ uri: re.url });
       const og = {
-        og_title: ext.ogTitle || ext.title,
-        og_image: ext.ogImage || ext.twitterImage,
+        og_title: ext.ogTitle || ext.title || '',
+        og_image: ext.ogImage || ext.twitterImage || '',
         og_description:
           ext.ogDescription || ext.description || ext.twitterDescription,
       };
