@@ -1,28 +1,22 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 
 const crawler = async (url) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url);
+  await page.waitForSelector('span span');
 
-  const value = await page.evalueate(() => {
-    let scrappedDate = [];
-    if (url.indexOf('naver') > -1 && url.indexOf('news') > -1) {
-      const tbodyChildren = document.querySelector('.content').childNodes[5];
-
-      for (let i = 1; i < tbodyChildren.length; i++) {
-        scrappedDate.push({
-          version: tbodyChilds[i].children[0].textContent,
-          released: tbodyChilds[i].children[1].textContent,
-          changes: tbodyChilds[i].children[2].textContent,
-        });
+  const value = await page.evaluate(() => {
+    let scrappedData = [];
+    Array.from(document.querySelectorAll('span')).map((span) => {
+      if (scrappedData.indexOf(span.textContent) === -1) {
+        scrappedData.push(span.textContent);
       }
-    }
-    console.log(scrappedDate);
-    return scrappedDate;
+    });
+    return scrappedData;
   });
   await browser.close();
-  value();
+  return value.join('');
 };
 
 module.exports = crawler;

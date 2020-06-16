@@ -22,6 +22,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    og_title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: true,
+    },
+    og_image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: true,
+    },
+    og_description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: true,
+    },
   });
 
   urls.associate = function (models) {
