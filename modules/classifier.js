@@ -20,15 +20,29 @@ const classifier = async (url) => {
     const text = await cheerio(url);
 
     console.log(text.length);
-    const analyzeParams = {
-      text: text,
-      //url: url,
-      features: {
-        categories: {
-          limit: 3,
+
+    let analyzeParams;
+    if (text.length < 5000) {
+      console.log('text<5000');
+      analyzeParams = {
+        url: url,
+        features: {
+          categories: {
+            limit: 3,
+          },
         },
-      },
-    };
+      };
+    } else {
+      console.log('text>=5000');
+      analyzeParams = {
+        text: text,
+        features: {
+          categories: {
+            limit: 3,
+          },
+        },
+      };
+    }
 
     const newClassifier = async () => {
       let goNLU = await naturalLanguageUnderstanding.analyze(analyzeParams);
