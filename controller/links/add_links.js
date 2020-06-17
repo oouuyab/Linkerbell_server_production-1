@@ -9,7 +9,7 @@ module.exports = {
     const category = async function () {
       return classifier(req.body.url);
     };
-    const result = await category();
+    const { result, analysis } = await category();
     const ext = await extract({ uri: req.body.url });
     urls
       .findOrCreate({
@@ -33,7 +33,7 @@ module.exports = {
           return res.status(409).send('이미 존재하는 url입니다.');
         }
         const data = await url.get({ plain: true });
-        res.status(201).json(data);
+        res.status(201).send({ ...data, analysis: analysis });
       });
   },
   delete: (req, res) => {
