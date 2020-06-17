@@ -7,6 +7,9 @@ module.exports = {
     try {
       const token_info = checkToken(req);
       const { user_id } = token_info;
+      if (user_id === undefined) {
+        return res.status(403).send('로그인을 해주세요');
+      }
       const category = async function () {
         return classifier(req.body.url);
       };
@@ -34,7 +37,7 @@ module.exports = {
             return res.status(409).send('이미 존재하는 url입니다.');
           }
           const data = await url.get({ plain: true });
-          res.status(201).send({ ...data, analysis: analysis });
+          res.status(201).send({ link_data: { ...data }, analysis: analysis });
         });
     } catch (err) {
       return res.status(400).send('bad request');
