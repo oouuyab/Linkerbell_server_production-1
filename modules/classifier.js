@@ -2,7 +2,6 @@ const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-unde
 const { IamAuthenticator } = require('ibm-watson/auth');
 const dotenv = require('dotenv').config();
 const category = require('./category');
-const crawler = require('./crawler');
 const cheerio = require('./cheerio');
 
 const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
@@ -15,8 +14,7 @@ const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
 
 const classifier = async (url) => {
   try {
-    console.time('classifier');
-    //const text = await crawler(url);
+    console.time('classifier time');
     const text = await cheerio(url);
 
     console.log(text.length);
@@ -56,7 +54,7 @@ const classifier = async (url) => {
     };
     let result = await newClassifier();
     console.log(result);
-    console.timeEnd('classifier');
+    console.timeEnd('classifier time');
     return result;
   } catch (err) {
     return { result: 0, analysis: [] };
