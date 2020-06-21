@@ -1,7 +1,6 @@
 const axios = require('axios');
 const cheer = require('cheerio');
 const puppet = require('puppeteer');
-//const Iconv = require('iconv').Iconv;
 const Iconv = require('iconv-lite');
 const jschardet = require('jschardet');
 
@@ -59,15 +58,19 @@ const cheerio = async (url) => {
         );
       }
       console.log(innerText[0]);
-      if (innerText[0].length < 300) {
-        console.log('300자 미만');
+      if (innerText[0].length < 150) {
+        console.log('150자 미만');
         return '';
       }
+      console.log('150자 이상');
       console.log('길이: ' + innerText[0].length);
       return innerText.join().slice(0, 10000);
     });
+
+    return text;
   } catch (err) {
     console.log(err);
+    return '';
   }
 };
 
