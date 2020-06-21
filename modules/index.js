@@ -6,6 +6,5 @@ module.exports = {
   updateToken: require('./updateToken'),
   addOauthToken: require('./addOauthToken'),
   category: require('./category'),
-  crawler: require('./crawler'),
   cheerio: require('./cheerio'),
 };

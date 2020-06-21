@@ -40,7 +40,7 @@ const classifier = async (url) => {
         },
       };
     }
-    console.log('newclassfier');
+    console.log('newClassfier');
     const newClassifier = async () => {
       let goNLU = await naturalLanguageUnderstanding.analyze(analyzeParams);
       let analysisNLU = function () {
