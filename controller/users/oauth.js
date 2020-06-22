@@ -27,7 +27,7 @@ module.exports = {
           console.log(token);
         }
 
-        return res.status(203).cookie('token', token).json(token);
+        return res.status(200).cookie('token', token).json(token);
       };
       verify();
     } catch {
