@@ -33,7 +33,7 @@ module.exports = {
           const user_info = addToken(user.dataValues);
           req.session.id = user.dataValues.id;
           res
-            .status(201)
+            .status(200)
             .cookie('session_id', req.session.id)
             .cookie('token', user_info)
             .json({

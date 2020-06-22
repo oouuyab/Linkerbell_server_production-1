@@ -13,7 +13,7 @@ module.exports = {
         const token_info = checkToken(req);
         const { user_id } = token_info;
         //const token = enToken(req.cookies);
-        res.status(256).json({ user_id: user_id, token: req.cookies.token });
+        res.status(200).json({ user_id: user_id, token: req.cookies.token });
       } else if (!req.cookies.session_id) {
         res.status(404).end('로그인 해주세요!');
       } else {
