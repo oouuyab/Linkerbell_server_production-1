@@ -5,5 +5,5 @@ module.exports = {
   profile: require('./profile'),
   mypage: require('./mypage'),
   oauth: require('./oauth'),
-  oauth_1: require('./oauth'),
+  oauth_1: require('./oauth_1'),
 };
