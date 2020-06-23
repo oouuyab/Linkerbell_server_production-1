@@ -31,7 +31,7 @@ module.exports = {
       };
       verify();
     } catch {
-      res.status(400).send('oauth 실패');
+      res.status(400).send('please_signin');
     }
   },
 };

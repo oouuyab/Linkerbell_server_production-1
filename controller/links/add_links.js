@@ -40,6 +40,7 @@ module.exports = {
           res.status(201).send({ link_data: { ...data }, analysis: analysis });
         });
     } catch (err) {
+      console.log(err);
       return res.status(400).send('bad request');
     }
   },
