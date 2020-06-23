@@ -43,6 +43,8 @@
     "mysql2": "^2.1.0",
     "puppeteer": "^4.0.0",
     "puppeteer-core": "^3.3.0",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8",
     "sequelize": "^5.21.11"
   },
   "devDependencies": {

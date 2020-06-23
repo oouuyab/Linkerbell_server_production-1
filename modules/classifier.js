@@ -13,55 +13,64 @@ const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
 });
 
 const classifier = async (url) => {
+  console.log('classifier');
   try {
-    console.time('classifier time');
     console.log('cheeio실행');
-    const text = await cheerio(url);
-    console.log(text);
-    let analyzeParams;
-    if (text.length < 150) {
-      console.log(`text : ${text.length} < 150`);
-      analyzeParams = {
-        url: url,
-        features: {
-          categories: {
-            limit: 3,
-          },
-        },
-      };
+    //! 예외 1 쿠팡 (https://m.coupang.com/ || https://www.coupang.com)
+    if (
+      url.indexOf('https://m.coupang.com/') > -1 ||
+      url.indexOf('https://www.coupang.com') > -1
+    ) {
+      console.log('쿠팡!');
+      return { result: 18, analysis: [{ score: 1, label: '/shopping' }] };
+      // } else if(){
     } else {
-      console.log(`text : ${text.length} > 150`);
-      analyzeParams = {
-        text: text,
-        features: {
-          categories: {
-            limit: 3,
+      const text = await cheerio(url);
+      let analyzeParams;
+      if (text.length < 150) {
+        console.log(`text : ${text.length} < 150`);
+        analyzeParams = {
+          url: url,
+          features: {
+            categories: {
+              limit: 3,
+            },
           },
-        },
+        };
+      } else {
+        console.log(`text : ${text.length} > 150`);
+        analyzeParams = {
+          text: text,
+          features: {
+            categories: {
+              limit: 3,
+            },
+          },
+        };
+      }
+      console.log('카테고리 재분류');
+      const newClassifier = async () => {
+        let goNLU = await naturalLanguageUnderstanding.analyze(analyzeParams);
+        let analysisNLU = function () {
+          let analysis = goNLU.result.categories;
+          let category_id;
+          if (analysis.length === 0) {
+            category_id = 21;
+            analysis = [{ score: 0, label: '/etc' }];
+          } else {
+            category_id = category(analysis)[0].label;
+          }
+          console.log(category_id);
+          return { result: category_id, analysis: analysis };
+        };
+        let resultNLU = await analysisNLU();
+        return resultNLU;
       };
+
+      let result = await newClassifier();
+      console.log(result);
+      return result;
     }
-    console.log('newClassfier');
-    const newClassifier = async () => {
-      let goNLU = await naturalLanguageUnderstanding.analyze(analyzeParams);
-      let analysisNLU = function () {
-        let analysis = goNLU.result.categories;
-        let result;
-        if (analysis.length === 0) {
-          result = 21;
-          analysis = [{ score: 0, label: '/etc' }];
-        } else {
-          result = category(analysis)[0].label;
-        }
-        console.log(result);
-        return { result: result, analysis: analysis };
-      };
-      let resultNLU = await analysisNLU();
-      return resultNLU;
-    };
-    let result = await newClassifier();
-    console.log(result);
-    console.timeEnd('classifier time');
-    return result;
   } catch (err) {
     console.log(err);
     return { result: 21, analysis: [{ score: 0, label: '/etc' }] };
