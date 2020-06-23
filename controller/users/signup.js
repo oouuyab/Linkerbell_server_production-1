@@ -2,7 +2,7 @@ const { users } = require('../../models');
 
 module.exports = {
   post: (req, res) => {
-    const { email, password, age, gender } = req.body;
+    const { email, password } = req.body;
     users
       .findOrCreate({
         where: {
