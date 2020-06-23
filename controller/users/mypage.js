@@ -8,7 +8,7 @@ module.exports = {
     console.log(req.cookies.session_id);
     if (req.cookies.session_id) {
       if (!req.cookies.token) {
-        res.status(404).end('로그인 해주세요!');
+        res.status(404).end('please_signin');
       }
       console.log(req.cookies.token);
       const token_info = checkToken(req);
@@ -20,7 +20,7 @@ module.exports = {
 
       users.findOne({ where: { id: id } }).then(async (result) => {
         if (result === null) {
-          res.status(401).send('회원 정보가 없습니다.');
+          res.status(401).send('please_signin');
         }
         if (result.password) {
           if (bcrypt.compareSync(password, result.password)) {
@@ -30,12 +30,12 @@ module.exports = {
             users.update({ password: hash }, { where: { id: id } });
             res.status(200).send('비밀번호 변경 완료');
           } else {
-            res.status(401).send('비밀번호가 맞지 않습니다.');
+            res.status(401).send('check_pw');
           }
         }
       });
     } else {
-      res.status(404).end('로그인 해주세요!');
+      res.status(404).end('please_signin');
     }
   },
 };
