@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 
 let addToken = (result) => {
-  const { id } = result;
-  let userInfo = { user_id: id }; //사용자 정보
+  console.log(result);
+  const { id, email } = result;
+  let userInfo = { user_id: id, email: email }; //사용자 정보
   let options = { expiresIn: '7d', issuer: 'Linkerbell', subject: 'userInfo' };
 
   userInfo.token = jwt.sign(userInfo, process.env.JWTSECRETKEY, options);
