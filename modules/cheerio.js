@@ -21,6 +21,7 @@ const getIframeUrl = async (url) => {
 };
 const cheerio = async (url) => {
   console.log('cheerio 실행');
+  console.time('cheerio');
   try {
     const innerText = [];
     console.log(url);
@@ -37,6 +38,7 @@ const cheerio = async (url) => {
       },
       async (err, res, body) => {
         //* 1. encoding
+        if (err) throw err;
         const enc = charset(res.headers, body);
         const decodedResult = Iconv.decode(body, enc);
         const $ = cheer.load(decodedResult);
@@ -59,13 +61,16 @@ const cheerio = async (url) => {
     console.log(innerText[0]);
     if (innerText[0].length < 150) {
       console.log('150자 미만');
+      console.timeEnd('cheerio');
       return '';
     }
     console.log('150자 이상');
     console.log('길이: ' + innerText[0].length);
+    console.timeEnd('cheerio');
     return innerText.join().slice(0, 10000);
   } catch (err) {
     console.log(err);
+    console.timeEnd('cheerio');
     return '';
   }
 };
