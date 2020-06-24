@@ -37,7 +37,21 @@ const classifier = async (url) => {
     ) {
       console.timeEnd('classifier');
       return { result: 18, analysis: [{ score: 1, label: '/shopping' }] };
-      // } else if(){
+    } else if (
+      //! 예외 2 네이버 사전, 파파고
+      url.indexOf('dict.naver.com') > -1 ||
+      url.indexOf('papago.naver.com') > -1
+    ) {
+      return { result: 4, analysis: [{ score: 1, label: '/education' }] };
+    } else if (
+      url.indexOf('https://soundcloud.com/') > -1 ||
+      url.indexOf('https://m.soundcloud.com/') > -1 ||
+      url.indexOf('netflix.com') > -1
+    ) {
+      return {
+        result: 1,
+        analysis: [{ score: 1, label: '/art and entertainment' }],
+      };
     } else {
       const text = await cheerio(url);
       let analyzeParams;
