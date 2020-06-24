@@ -11,10 +11,12 @@ module.exports = {
       if (user_id === undefined) {
         return res.status(403).send('로그인을 해주세요');
       }
-      const category = async function () {
-        return classifier(req.body.url);
-      };
+      //* 카테고리 분석
+      console.time('카테고리 분석');
+      const category = () => classifier(req.body.url);
       const { result, analysis } = await category();
+      console.timeEnd('카테고리 분석');
+      //* og 분석
       const ogt = await og.getOgData(req.body.url, (err, ogt) => {
         send_og(ogt);
       });
@@ -29,6 +31,7 @@ module.exports = {
           og.og_description = edit_d;
         }
 
+        //* DB
         await urls
           .findOrCreate({
             where: {

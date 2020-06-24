@@ -9,6 +9,9 @@ const category = (arr) => {
   return newResult;
 };
 
+// ? 쇼핑몰 분석 결과 ['/business and industrial/advertising and marketing']로
+// ? 분석되는 경우가 많았음. 따라서 해당 label을 shopping으로 분류
+
 const newLabel = (data) => {
   const label = data.split('/');
   console.log(label);
@@ -16,7 +19,10 @@ const newLabel = (data) => {
     return 1;
   } else if (label[1] === 'automotive and vehicles') {
     return 2;
-  } else if (label[1] === 'business and industrial') {
+  } else if (
+    label[1] === 'business and industrial' &&
+    label[2] !== 'advertising and marketing'
+  ) {
     return 3;
   } else if (label[1] === 'careers' || label[1] === 'education') {
     return 4;
@@ -46,7 +52,10 @@ const newLabel = (data) => {
     return 16;
   } else if (label[1] === 'science') {
     return 17;
-  } else if (label[1] === 'shopping') {
+  } else if (
+    label[1] === 'shopping' ||
+    label[2] === 'advertising and marketing'
+  ) {
     return 18;
   } else if (label[1] === 'style and fashion') {
     return 19;
