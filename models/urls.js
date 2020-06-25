@@ -1,5 +1,6 @@
 'use strict';
-
+// alter table urls modify url VARCHAR(1000) ;
+// alter table urls modify og_image VARCHAR(1000) ;
 module.exports = (sequelize, DataTypes) => {
   const urls = sequelize.define('urls', {
     user_id: {
@@ -7,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     url: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
       allowNull: false,
     },
     category_id: {
@@ -28,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: true,
     },
     og_image: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
       allowNull: false,
       defaultValue: true,
     },
