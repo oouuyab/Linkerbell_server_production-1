@@ -30,7 +30,7 @@ module.exports = {
         return res
           .status(200)
           .cookie('token', token)
-          .json({ token: token, isOauth: 1 });
+          .json({ token: token, isOauth: 1, autoLogin: 0 });
       };
       verify();
     } catch {
