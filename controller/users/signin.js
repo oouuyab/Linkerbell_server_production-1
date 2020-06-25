@@ -12,11 +12,15 @@ module.exports = {
         }
         console.log(req.cookies.token);
         const token_info = checkToken(req);
-        const { user_id, email } = token_info;
+        console.log(token_info);
+        const { user_id, email, isOauth } = token_info;
         //const token = enToken(req.cookies);
-        res
-          .status(200)
-          .json({ user_id: user_id, email: email, token: req.cookies.token });
+        res.status(200).json({
+          user_id: user_id,
+          email: email,
+          token: req.cookies.token,
+          isOauth: isOauth,
+        });
       } else if (!req.cookies.session_id) {
         res.status(404).end('please_signin');
       } else {
@@ -47,7 +51,9 @@ module.exports = {
                 .cookie('token', user_info)
                 .json({
                   user_id: result.dataValues.id,
+                  email: result.dataValues.email,
                   token: user_info,
+                  isOauth: 0,
                 })
                 .end();
             } else {

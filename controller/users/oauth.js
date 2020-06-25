@@ -27,7 +27,10 @@ module.exports = {
           console.log(token);
         }
 
-        return res.status(200).cookie('token', token).json(token);
+        return res
+          .status(200)
+          .cookie('token', token)
+          .json({ token: token, isOauth: 1 });
       };
       verify();
     } catch {
