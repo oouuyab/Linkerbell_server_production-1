@@ -31,6 +31,7 @@ module.exports = {
               user_id: data.id,
               email: data.email,
               isOauth: 1,
+              autoLogin: 0,
             });
         } else {
           //? 이미 가입
@@ -46,6 +47,7 @@ module.exports = {
               user_id: user.dataValues.id,
               email: data.email,
               isOauth: 1,
+              autoLogin: 0,
             });
         }
       })

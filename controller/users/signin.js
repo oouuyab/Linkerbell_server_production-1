@@ -20,6 +20,7 @@ module.exports = {
           email: email,
           token: req.cookies.token,
           isOauth: isOauth,
+          autoLogin: 1,
         });
       } else if (!req.cookies.session_id) {
         res.status(404).end('please_signin');
@@ -54,6 +55,7 @@ module.exports = {
                   email: result.dataValues.email,
                   token: user_info,
                   isOauth: 0,
+                  autoLogin: 0,
                 })
                 .end();
             } else {
