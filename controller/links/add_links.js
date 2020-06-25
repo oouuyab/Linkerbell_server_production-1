@@ -17,30 +17,41 @@ module.exports = {
       const { result, analysis } = await category();
       console.timeEnd('카테고리 분석');
       //* og 분석
+      console.time('og');
       const ogt = await og.getOgData(req.body.url, (err, ogt) => {
+        console.log('ogt', ogt);
         send_og(ogt);
       });
-      const send_og = async (og) => {
-        !og.og_title
-          ? (og.og_title = req.body.url)
-          : console.log('title exist');
-        const edit_t = og.og_title.replace(/\n|\t|\r/g, '');
+      function send_og(og) {
+        !og.og_title ? (og.og_title = url) : console.log('title exist');
+        const { url } = req.body;
+        if (url.length > 40) {
+          const parameter = url.indexOf('?');
+          var short_url = url.slice(0, parameter);
+          if (og.og_title === url) {
+            og.og_title = short_url;
+          }
+        }
+        const edit_t = og.og_title.replace(/(^\s*)|(\s*$)|\n|\t|\r/g, '');
         og.og_title = edit_t;
         if (og.og_description) {
-          const edit_d = og.og_description.replace(/\n|\t|\r/g, '');
+          const edit_d = og.og_description.replace(
+            /(^\s*)|(\s*$)|\n|\t|\r/g,
+            ''
+          );
           og.og_description = edit_d;
         }
 
         //* DB
-        await urls
+        urls
           .findOrCreate({
             where: {
               user_id: user_id,
-              url: req.body.url,
+              url: url,
             },
             defaults: {
               category_id: result,
-              og_title: og.og_title,
+              og_title: og.og_title || url,
               og_image: og.og_image || '',
               og_description: og.og_description || '',
             },
@@ -55,7 +66,8 @@ module.exports = {
                 .send({ link_data: { ...data }, analysis: analysis });
             }
           });
-      };
+      }
+      console.timeEnd('og');
     } catch (err) {
       return res.status(400).send('bad request');
     }
