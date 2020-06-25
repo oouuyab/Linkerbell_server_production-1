@@ -9,7 +9,7 @@ module.exports = {
       const token_info = checkToken(req);
       const { user_id } = token_info;
       if (user_id === undefined) {
-        return res.status(403).send('로그인을 해주세요');
+        return res.status(403).send('please_signin');
       }
       //* 카테고리 분석
       console.time('카테고리 분석');
