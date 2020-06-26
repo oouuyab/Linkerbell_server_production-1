@@ -14,7 +14,6 @@ const category = (arr) => {
 
 const newLabel = (data) => {
   const label = data.split('/');
-  console.log(label);
   if (label[1] === 'art and entertainment') {
     return 1;
   } else if (label[1] === 'automotive and vehicles') {

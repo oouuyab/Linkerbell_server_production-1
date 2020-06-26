@@ -36,7 +36,6 @@ module.exports = {
         } else {
           //? 이미 가입
           const newData = { ...user.dataValues, isOauth: 1 };
-          console.log(newData);
           const user_info = addToken(newData);
           req.session.id = user.dataValues.id;
           res
@@ -45,13 +44,14 @@ module.exports = {
             .cookie('token', user_info)
             .json({
               user_id: user.dataValues.id,
-              email: data.email,
+              email: newData.email,
               isOauth: 1,
               autoLogin: 0,
             });
         }
       })
       .catch((err) => {
+        console.log(err);
         res.status(404).send('please_signin');
       });
   },
