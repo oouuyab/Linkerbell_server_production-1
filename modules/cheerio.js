@@ -42,9 +42,13 @@ const cheerio = async (url) => {
             .replace('<script type="x-clip-content" id="__clipContent">', '')
             .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
             .replace(/(<([^>]+)>)/gi, '')
-            .replace(/  |(^\s*)|(\s*$)|\n|\t|\r/g, '')
+            .replace(/  |&nbsp;|(^\s*)|(\s*$)|\n|\t|\r/g, '')
         );
       } else {
+        if (url.indexOf('twitter.com/') > -1) {
+          console.log($('meta[property="og:title"]').attr('content'));
+          return '';
+        }
         //! 분기 : <iframe></iframe> 이 있는지 판단
         if ($('body').html().indexOf('mainFrame') > -1) {
           console.log('mainFrame 있음');
@@ -57,7 +61,6 @@ const cheerio = async (url) => {
             iframeUrl = 'https://blog.naver.com' + $('iframe').attr('src');
           }
           console.log(iframeUrl);
-          //const iframeUrl = await getIframeUrl(url);
           return cheerio(iframeUrl);
         } else {
           console.log('mainFrame 없음');

@@ -1,5 +1,6 @@
+const axios = require('axios');
+const Iconv = require('iconv-lite');
 const { FB } = require('fb');
-
 var cheerio = require('cheerio');
 var request = require('request');
 var puppeteer = require('puppeteer');
@@ -49,16 +50,36 @@ exports.getOgData = async (data_url, cb) => {
     //////////////fb end///////////////////////////////////////////////////////////////
     //////////////////////////////iframe//////////body//////////////////////////////////////
     const iframeUrl = async (url) => {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto(url);
-      const urls = await page.$$eval('iframe', (el) =>
-        [].map.call(el, (d) => d.src)
-      );
-      await browser.close();
-      const i_url = urls[0];
-      console.log('iframe_url', i_url);
-      req_og(i_url);
+      const getHtml = async () => {
+        const opt = {
+          method: 'get',
+          timeout: 2000,
+          maxRedirects: 5,
+          responseEncoding: 'binary',
+          responseType: 'arraybuffer',
+        };
+        return await axios.get(url, opt);
+      };
+      const text = await getHtml().then(async (htmlDoc) => {
+        //* 2-1 innerText : html에서 텍스트를 저장하는배열
+        let innerText = [];
+        //* 2-2 decoding
+        const enc = charset(htmlDoc.headers, htmlDoc.data);
+        const decodedResult = Iconv.decode(htmlDoc.data, enc);
+        const $ = cheerio.load(decodedResult);
+        //* 2-3 getText: body tag의 text 가져오기
+        //! 분기 : naver Post 인지 판단
+        let iframeUrl;
+        if (url.indexOf('https://m.blog.naver.com') > -1) {
+          console.log('naver blog - mobile');
+          iframeUrl = 'https://m.blog.naver.com' + $('iframe').attr('src');
+        } else if (url.indexOf('https://blog.naver.com') > -1) {
+          console.log('naver blog - mobile');
+          iframeUrl = 'https://blog.naver.com' + $('iframe').attr('src');
+        }
+        console.log(iframeUrl);
+        return req_og(iframeUrl);
+      });
     };
 
     ///////////////////////iframe end///////////////////////////
@@ -198,6 +219,7 @@ exports.getOgData = async (data_url, cb) => {
     }
   } catch (err) {
     console.log('og.js error');
+    console.log(err);
     var no_og = { og_title: data_url };
     return cb(err, no_og);
   }
