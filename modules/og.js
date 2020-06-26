@@ -3,14 +3,12 @@ const Iconv = require('iconv-lite');
 const { FB } = require('fb');
 var cheerio = require('cheerio');
 var request = require('request');
-var puppeteer = require('puppeteer');
 const metascraper = require('metascraper')([
   require('metascraper-description')(),
   require('metascraper-image')(),
   require('metascraper-title')(),
 ]);
 const got = require('got');
-const iconv = require('iconv-lite');
 const charset = require('charset');
 
 exports.getOgData = async (data_url, cb) => {
@@ -30,8 +28,10 @@ exports.getOgData = async (data_url, cb) => {
           access_token: process.env.FB_OG_API_TOKEN,
         },
         function (fb) {
+          console.time('fb api');
           if (!fb) {
             var no_og = { og_title: data_url };
+            console.timeEnd('fb api');
             return cb('fb api connection error', no_og);
           }
           let img;
@@ -43,7 +43,8 @@ exports.getOgData = async (data_url, cb) => {
           };
           og = fb_og;
           console.log('fb og->og', og);
-          return cb('', og);
+          console.timeEnd('fb api');
+          return cb(null, og);
         }
       );
     };
@@ -96,6 +97,7 @@ exports.getOgData = async (data_url, cb) => {
         },
         async function (error, response, body) {
           if (!error && response.statusCode == 200) {
+            console.time('req ogt');
             const encode = charset(response.headers, body);
             if (!encode) {
               metascrap(data_url);
@@ -138,6 +140,7 @@ exports.getOgData = async (data_url, cb) => {
               }
             });
             if (!ogTitle || !ogImage) {
+              console.timeEnd('req ogt');
               metascrap(data_url);
             } else {
               var r_og = {
@@ -147,10 +150,12 @@ exports.getOgData = async (data_url, cb) => {
               };
               og = r_og;
               console.log('req og->og', og);
+              console.timeEnd('req ogt');
               return cb(error, og);
             }
           } else {
             var no_og = { og_title: data_url };
+            console.timeEnd('req ogt');
             return cb('req og error', no_og);
           }
         }
@@ -159,9 +164,11 @@ exports.getOgData = async (data_url, cb) => {
     ////////////////metascraper/////////////////////////////////////////
     async function metascrap(my_url) {
       try {
+        console.time('metascrap og');
         const { body: html, url } = await got(my_url);
         const metadata = await metascraper({ html, url });
         if (!metadata || metadata.title === null || metadata.image === null) {
+          console.timeEnd('metascrap og');
           facebook(data_url);
         } else {
           var meta_og = {
@@ -171,11 +178,13 @@ exports.getOgData = async (data_url, cb) => {
           };
           og = meta_og;
           console.log('meta og->og', og);
-          return cb('', og);
+          console.timeEnd('metascrap og');
+          return cb(null, og);
         }
       } catch (err) {
         console.log('og.js error');
         var no_og = { og_title: data_url };
+        console.timeEnd('metascrap og');
         return cb(err, no_og);
       }
     }
@@ -191,7 +200,7 @@ exports.getOgData = async (data_url, cb) => {
             'https://t1.daumcdn.net/cafe_image/cafe_meta_image_190529.png',
           og_description: '',
         };
-        return cb('', og);
+        return cb(null, og);
       } else {
         facebook(data_url);
       }
@@ -213,7 +222,7 @@ exports.getOgData = async (data_url, cb) => {
         og_image: 'https://img1a.coupangcdn.com/image/mobile/v3/logo.png',
         og_description: '',
       };
-      return cb('', og);
+      return cb(null, og);
     } else {
       req_og(data_url);
     }
@@ -221,6 +230,7 @@ exports.getOgData = async (data_url, cb) => {
     console.log('og.js error');
     console.log(err);
     var no_og = { og_title: data_url };
+    console.timeEnd('og.js');
     return cb(err, no_og);
   }
   console.timeEnd('og.js');
