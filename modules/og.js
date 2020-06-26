@@ -4,14 +4,12 @@ const { FB } = require('fb');
 
 var cheerio = require('cheerio');
 var request = require('request');
-var puppeteer = require('puppeteer');
 const metascraper = require('metascraper')([
   require('metascraper-description')(),
   require('metascraper-image')(),
   require('metascraper-title')(),
 ]);
 const got = require('got');
-const iconv = require('iconv-lite');
 const charset = require('charset');
 
 exports.getOgData = async (data_url, cb) => {

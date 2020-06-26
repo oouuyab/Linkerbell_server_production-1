@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
   res.send('Hello World');
 });
 
-app.use('/users', usersRouter, (req, res) => {});
+app.use('/users', usersRouter);
 app.use('/links', linksRouter);
 
 app.listen(7000, function () {
