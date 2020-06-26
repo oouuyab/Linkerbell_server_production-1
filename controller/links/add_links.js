@@ -1,3 +1,4 @@
+const xss = require('xss');
 const { urls } = require('../../models');
 const og = require('../../modules/og');
 const { classifier } = require('../../modules');
@@ -9,49 +10,57 @@ module.exports = {
       const token_info = checkToken(req);
       const { user_id } = token_info;
       if (user_id === undefined) {
-        return res.status(403).send('로그인을 해주세요');
+        return res.status(403).send('please_signin');
       }
+      const { url } = req.body;
+      // xss
+      var rurl = xss(url);
+      // 한글 입력시 url 인코딩
+      var enc_url = encodeURI(rurl);
       //* 카테고리 분석
       console.time('카테고리 분석');
       const category = () => classifier(req.body.url);
       const { result, analysis } = await category();
       console.timeEnd('카테고리 분석');
       //* og 분석
-      console.time('og');
-      const ogt = await og.getOgData(req.body.url, (err, ogt) => {
-        console.log('ogt', ogt);
+      console.time('ogt');
+      const ogt = await og.getOgData(enc_url, (err, ogt) => {
         send_og(ogt);
       });
+      console.timeEnd('ogt');
       function send_og(og) {
-        !og.og_title ? (og.og_title = url) : console.log('title exist');
-        const { url } = req.body;
+        console.time('send_og');
+        !og.og_title ? (og.og_title = enc_url) : console.log('title exist');
         if (url.length > 40) {
-          const parameter = url.indexOf('?');
-          var short_url = url.slice(0, parameter);
-          if (og.og_title === url) {
+          const parameter = enc_url.indexOf('?');
+          var short_url = enc_url.slice(0, parameter);
+          if (og.og_title === enc_url) {
             og.og_title = short_url;
           }
         }
         const edit_t = og.og_title.replace(/(^\s*)|(\s*$)|\n|\t|\r/g, '');
         og.og_title = edit_t;
         if (og.og_description) {
-          const edit_d = og.og_description.replace(
-            /(^\s*)|(\s*$)|\n|\t|\r/g,
-            ''
-          );
+          const edit_d = og.og_description
+            .replace(/(^\s*)|(\s*$)|\n|\t|\r/g, '')
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#039;/g, "'")
+            .replace(/&#39;/g, "'");
           og.og_description = edit_d;
         }
-
         //* DB
         urls
           .findOrCreate({
             where: {
               user_id: user_id,
-              url: url,
+              url: enc_url,
             },
             defaults: {
               category_id: result,
-              og_title: og.og_title || url,
+              og_title: og.og_title || enc_url,
               og_image: og.og_image || '',
               og_description: og.og_description || '',
             },
@@ -66,6 +75,7 @@ module.exports = {
                 .send({ link_data: { ...data }, analysis: analysis });
             }
           });
+        console.timeEnd('send_og');
       }
       console.timeEnd('og');
     } catch (err) {

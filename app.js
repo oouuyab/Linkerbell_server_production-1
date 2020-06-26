@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var sqlinjection = require('sql-injection');
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -37,7 +38,7 @@ app.get('/', function (req, res) {
   res.send('Hello World');
 });
 
-app.use('/users', usersRouter);
+app.use('/users', usersRouter, (req, res) => {});
 app.use('/links', linksRouter);
 
 app.listen(7000, function () {
@@ -45,8 +46,8 @@ app.listen(7000, function () {
 });
 
 app.use((req, res, next) => {
+  app.use(sqlinjection);
   console.log('serving request type' + req.method + 'for url' + req.url);
-
   const allowedOrigins = ['http://localhost:7000'];
   const origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {

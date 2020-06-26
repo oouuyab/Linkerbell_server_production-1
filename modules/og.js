@@ -1,3 +1,5 @@
+const axios = require('axios');
+const Iconv = require('iconv-lite');
 const { FB } = require('fb');
 
 var cheerio = require('cheerio');
@@ -29,8 +31,10 @@ exports.getOgData = async (data_url, cb) => {
           access_token: process.env.FB_OG_API_TOKEN,
         },
         function (fb) {
+          console.time('fb api');
           if (!fb) {
             var no_og = { og_title: data_url };
+            console.timeEnd('fb api');
             return cb('fb api connection error', no_og);
           }
           let img;
@@ -42,23 +46,44 @@ exports.getOgData = async (data_url, cb) => {
           };
           og = fb_og;
           console.log('fb og->og', og);
-          return cb('', og);
+          console.timeEnd('fb api');
+          return cb(null, og);
         }
       );
     };
     //////////////fb end///////////////////////////////////////////////////////////////
     //////////////////////////////iframe//////////body//////////////////////////////////////
     const iframeUrl = async (url) => {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto(url);
-      const urls = await page.$$eval('iframe', (el) =>
-        [].map.call(el, (d) => d.src)
-      );
-      await browser.close();
-      const i_url = urls[0];
-      console.log('iframe_url', i_url);
-      req_og(i_url);
+      const getHtml = async () => {
+        const opt = {
+          method: 'get',
+          timeout: 2000,
+          maxRedirects: 5,
+          responseEncoding: 'binary',
+          responseType: 'arraybuffer',
+        };
+        return await axios.get(url, opt);
+      };
+      const text = await getHtml().then(async (htmlDoc) => {
+        //* 2-1 innerText : html에서 텍스트를 저장하는배열
+        let innerText = [];
+        //* 2-2 decoding
+        const enc = charset(htmlDoc.headers, htmlDoc.data);
+        const decodedResult = Iconv.decode(htmlDoc.data, enc);
+        const $ = cheerio.load(decodedResult);
+        //* 2-3 getText: body tag의 text 가져오기
+        //! 분기 : naver Post 인지 판단
+        let iframeUrl;
+        if (url.indexOf('https://m.blog.naver.com') > -1) {
+          console.log('naver blog - mobile');
+          iframeUrl = 'https://m.blog.naver.com' + $('iframe').attr('src');
+        } else if (url.indexOf('https://blog.naver.com') > -1) {
+          console.log('naver blog - mobile');
+          iframeUrl = 'https://blog.naver.com' + $('iframe').attr('src');
+        }
+        console.log(iframeUrl);
+        return req_og(iframeUrl);
+      });
     };
 
     ///////////////////////iframe end///////////////////////////
@@ -75,6 +100,7 @@ exports.getOgData = async (data_url, cb) => {
         },
         async function (error, response, body) {
           if (!error && response.statusCode == 200) {
+            console.time('req ogt');
             const encode = charset(response.headers, body);
             if (!encode) {
               metascrap(data_url);
@@ -117,6 +143,7 @@ exports.getOgData = async (data_url, cb) => {
               }
             });
             if (!ogTitle || !ogImage) {
+              console.timeEnd('req ogt');
               metascrap(data_url);
             } else {
               var r_og = {
@@ -126,10 +153,12 @@ exports.getOgData = async (data_url, cb) => {
               };
               og = r_og;
               console.log('req og->og', og);
+              console.timeEnd('req ogt');
               return cb(error, og);
             }
           } else {
             var no_og = { og_title: data_url };
+            console.timeEnd('req ogt');
             return cb('req og error', no_og);
           }
         }
@@ -138,9 +167,11 @@ exports.getOgData = async (data_url, cb) => {
     ////////////////metascraper/////////////////////////////////////////
     async function metascrap(my_url) {
       try {
+        console.time('metascrap og');
         const { body: html, url } = await got(my_url);
         const metadata = await metascraper({ html, url });
         if (!metadata || metadata.title === null || metadata.image === null) {
+          console.timeEnd('metascrap og');
           facebook(data_url);
         } else {
           var meta_og = {
@@ -150,11 +181,13 @@ exports.getOgData = async (data_url, cb) => {
           };
           og = meta_og;
           console.log('meta og->og', og);
-          return cb('', og);
+          console.timeEnd('metascrap og');
+          return cb(null, og);
         }
       } catch (err) {
         console.log('og.js error');
         var no_og = { og_title: data_url };
+        console.timeEnd('metascrap og');
         return cb(err, no_og);
       }
     }
@@ -170,7 +203,7 @@ exports.getOgData = async (data_url, cb) => {
             'https://t1.daumcdn.net/cafe_image/cafe_meta_image_190529.png',
           og_description: '',
         };
-        return cb('', og);
+        return cb(null, og);
       } else {
         facebook(data_url);
       }
@@ -192,13 +225,15 @@ exports.getOgData = async (data_url, cb) => {
         og_image: 'https://img1a.coupangcdn.com/image/mobile/v3/logo.png',
         og_description: '',
       };
-      return cb('', og);
+      return cb(null, og);
     } else {
       req_og(data_url);
     }
   } catch (err) {
     console.log('og.js error');
+    console.log(err);
     var no_og = { og_title: data_url };
+    console.timeEnd('og.js');
     return cb(err, no_og);
   }
   console.timeEnd('og.js');
