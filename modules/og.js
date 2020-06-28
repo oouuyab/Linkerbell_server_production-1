@@ -102,7 +102,7 @@ exports.getOgData = async (data_url, cb) => {
             if (!encode) {
               metascrap(data_url);
             }
-            const decode = iconv.decode(body, encode);
+            const decode = Iconv.decode(body, encode);
             var $ = await cheerio.load(decode);
             var meta = $('meta');
             var keys = Object.keys(meta);

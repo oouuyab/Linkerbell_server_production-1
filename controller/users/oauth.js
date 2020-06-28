@@ -27,11 +27,13 @@ module.exports = {
             token = await updateToken(payload);
             console.log(token);
           }
-
-          return res
-            .status(200)
-            .cookie('token', token)
-            .json({ token: token, isOauth: 1, autoLogin: 0 });
+          console.log(findEmail.dataValues.id);
+          return res.status(200).cookie('token', token).json({
+            user_id: findEmail.dataValues.id,
+            token: token,
+            isOauth: 1,
+            autoLogin: 0,
+          });
         } catch (err) {
           res.status(400).send('please_signin');
         }
