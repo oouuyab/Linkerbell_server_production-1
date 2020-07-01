@@ -16,18 +16,16 @@ module.exports = {
       // xss
       var rurl = xss(url);
       // 한글 입력시 url 인코딩
-      var enc_url = encodeURI(rurl);
+      var enc_url = encodeURI(rurl).replace(/%25/g, '%');
       //* 카테고리 분석
       console.time('카테고리 분석');
       const category = () => classifier(req.body.url);
       const { result, analysis } = await category();
       console.timeEnd('카테고리 분석');
       //* og 분석
-      console.time('ogt');
       const ogt = await og.getOgData(enc_url, (err, ogt) => {
         send_og(ogt);
       });
-      console.timeEnd('ogt');
       function send_og(og) {
         console.time('send_og');
         !og.og_title ? (og.og_title = enc_url) : console.log('title exist');
@@ -77,7 +75,6 @@ module.exports = {
           });
         console.timeEnd('send_og');
       }
-      console.timeEnd('og');
     } catch (err) {
       return res.status(400).send('bad request');
     }

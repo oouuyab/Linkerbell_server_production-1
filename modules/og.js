@@ -12,7 +12,6 @@ const got = require('got');
 const charset = require('charset');
 
 exports.getOgData = async (data_url, cb) => {
-  console.time('og.js');
   let og = {};
   let fixed_url = '';
   console.log('getogdata');
@@ -49,6 +48,7 @@ exports.getOgData = async (data_url, cb) => {
       );
     };
     //////////////fb end///////////////////////////////////////////////////////////////
+
     //////////////////////////////iframe//////////body//////////////////////////////////////
     const iframeUrl = async (url) => {
       const getHtml = async () => {
@@ -102,7 +102,7 @@ exports.getOgData = async (data_url, cb) => {
             if (!encode) {
               metascrap(data_url);
             }
-            const decode = iconv.decode(body, encode);
+            const decode = Iconv.decode(body, encode);
             var $ = await cheerio.load(decode);
             var meta = $('meta');
             var keys = Object.keys(meta);
@@ -161,33 +161,67 @@ exports.getOgData = async (data_url, cb) => {
         }
       );
     }
+
     ////////////////metascraper/////////////////////////////////////////
-    async function metascrap(my_url) {
-      try {
-        console.time('metascrap og');
-        const { body: html, url } = await got(my_url);
-        const metadata = await metascraper({ html, url });
-        if (!metadata || metadata.title === null || metadata.image === null) {
-          console.timeEnd('metascrap og');
-          facebook(data_url);
-        } else {
-          var meta_og = {
-            og_title: metadata.title || data_url,
-            og_image: metadata.image || '',
-            og_description: metadata.description || '',
-          };
-          og = meta_og;
-          console.log('meta og->og', og);
-          console.timeEnd('metascrap og');
-          return cb(null, og);
-        }
-      } catch (err) {
-        console.log('og.js error');
-        var no_og = { og_title: data_url };
-        console.timeEnd('metascrap og');
-        return cb(err, no_og);
+    const getCharset = (response) => {
+      var data_charset;
+      if (response.headers !== undefined && response.headers['content-type']) {
+        const ctype = response.headers['content-type'];
+        data_charset = /charset=([^;]+)/g.exec(ctype);
+      } else {
+        data_charset = /charset=([^";]+)/g.exec(response.data.toString());
       }
-    }
+      return data_charset === null || data_charset.length < 2
+        ? undefined
+        : data_charset[1];
+    };
+
+    axios.interceptors.response.use((response) => {
+      const ax_charset = getCharset(response);
+      if (!ax_charset) ax_charset = 'utf-8';
+      response.data = Iconv.decode(response.data, ax_charset);
+      return response;
+    });
+
+    const metascrap = async (meta_url) => {
+      console.time('metascrap og');
+      const { data: html } = await axios
+        .request({
+          method: 'GET',
+          url: meta_url,
+          responseType: 'arraybuffer',
+          headers: {
+            Accept: '*/*',
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36 OPR/60.0.3255.170',
+          },
+        })
+        .catch((error) => {
+          console.log(error);
+          return { data: '' };
+        });
+      const metadata = await metascraper({ html, url: data_url });
+      if (!metadata || metadata.title === null || metadata.image === null) {
+        console.timeEnd('metascrap og');
+        facebook(data_url);
+      } else {
+        if (metadata.title.includes('$t') || metadata.title.includes('\\')) {
+          metadata.title = Iconv.decode(metadata.title, 'euc-kr');
+          if (metadata.title.includes('$t') || metadata.title.includes('\\')) {
+            metadata.title = Iconv.decode(metadata.title, 'cp949');
+          }
+        }
+        var meta_og = {
+          og_title: metadata.title || data_url,
+          og_image: metadata.image || '',
+          og_description: metadata.description || '',
+        };
+        og = meta_og;
+        console.log('meta og->og', og);
+        console.timeEnd('metascrap og');
+        return cb(null, og);
+      }
+    };
     ////////////////metascraper end/////////////////////////////////////////
 
     if (data_url.includes('https://blog.naver.com')) {
@@ -207,11 +241,6 @@ exports.getOgData = async (data_url, cb) => {
     } else if (data_url.includes('dict.naver.com/#/')) {
       fixed_url = data_url.replace(/#/, 'ko');
       facebook(fixed_url);
-    } else if (
-      data_url.includes('book.interpark') ||
-      data_url.includes('https://cafe.naver.com')
-    ) {
-      facebook(data_url);
     } else if (data_url.includes('smartstore.naver')) {
       const parameter = data_url.indexOf('?');
       fixed_url = data_url.slice(0, parameter);
@@ -230,8 +259,6 @@ exports.getOgData = async (data_url, cb) => {
     console.log('og.js error');
     console.log(err);
     var no_og = { og_title: data_url };
-    console.timeEnd('og.js');
     return cb(err, no_og);
   }
-  console.timeEnd('og.js');
 };
