@@ -13,7 +13,7 @@ const cheerio = async (url) => {
       return '';
     }
     //* 1. axios로 url에 get 요첨을 보냄
-    console.log(url);
+    console.log(`url: ${url}`);
     const getHtml = async () => {
       const opt = {
         method: 'get',
@@ -47,6 +47,7 @@ const cheerio = async (url) => {
       } else {
         if (url.indexOf('twitter.com/') > -1) {
           console.log($('meta[property="og:title"]').attr('content'));
+          console.timeEnd('cheerio');
           return '';
         }
         //! 분기 : <iframe></iframe> 이 있는지 판단
@@ -57,10 +58,10 @@ const cheerio = async (url) => {
             console.log('naver blog - mobile');
             iframeUrl = 'https://m.blog.naver.com' + $('iframe').attr('src');
           } else if (url.indexOf('https://blog.naver.com') > -1) {
-            console.log('naver blog - mobile');
+            console.log('naver blog - web');
             iframeUrl = 'https://blog.naver.com' + $('iframe').attr('src');
           }
-          console.log(iframeUrl);
+          console.log(`iframeUrl: ${iframeUrl}`);
           return cheerio(iframeUrl);
         } else {
           console.log('mainFrame 없음');

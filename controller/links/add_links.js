@@ -13,6 +13,13 @@ module.exports = {
         return res.status(403).send('please_signin');
       }
       const { url } = req.body;
+
+      const findUrl = await urls.findAll({
+        where: { user_id: user_id, url: url },
+      });
+      if (findUrl.length !== 0) {
+        return res.status(409).send('이미 존재하는 url입니다.');
+      }
       // xss
       var rurl = xss(url);
       // 한글 입력시 url 인코딩
