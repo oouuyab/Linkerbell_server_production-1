@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: ['exp://localhost:19000'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   })
@@ -48,7 +48,7 @@ app.listen(7000, function () {
 app.use((req, res, next) => {
   app.use(sqlinjection);
   console.log('serving request type' + req.method + 'for url' + req.url);
-  const allowedOrigins = ['http://localhost:7000'];
+  const allowedOrigins = ['exp://localhost:19000'];
   const origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
     res.setHeader('Access-Control-Allow-Origin', origin);

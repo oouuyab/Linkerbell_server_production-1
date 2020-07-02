@@ -58,8 +58,8 @@ const classifier = async (url) => {
       console.log(text);
       //* 1-1 watson api params를 담는 변수
       let analyzeParams;
-      //! 분기 : text가 150자 미만인 경우 url로 카테고리 분석
-      if (text.length < 150) {
+      //! 분기 : text가 200자 미만인 경우 url로 카테고리 분석
+      if (text.length < 200) {
         console.log(`text : ${text.length} < 150`);
         analyzeParams = {
           url: url,
@@ -71,7 +71,7 @@ const classifier = async (url) => {
         };
       } else {
         //! 분기: text가 150자 이상인 경우 text로 카테고리 분석
-        console.log(`text : ${text.length} > 150`);
+        console.log(`text : ${text.length} > 200`);
         analyzeParams = {
           text: text,
           features: {
@@ -96,10 +96,10 @@ const classifier = async (url) => {
             //! 분기: 분석에 실패한 경우
             category_id = 21;
             analysis = [{ score: 0, label: '/etc' }];
-            // } else if (analysis[0].score < 0.7) {
-            // // ! 분기:  score가 일정 기준을 넘지 않는 경우
-            //   category_id = 21;
-            //   analysis = [{ score: 0, label: '/etc' }];
+          } else if (analysis[0].score < 0.6) {
+            // ! 분기:  score가 일정 기준을 넘지 않는 경우
+            category_id = 21;
+            analysis = [{ score: 0, label: '/etc' }];
           } else {
             //? 일반적인 경우
             category_id = category(analysis)[0].label;
