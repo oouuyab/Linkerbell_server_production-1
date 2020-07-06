@@ -1,8 +1,7 @@
 const xss = require('xss');
 const { urls } = require('../../models');
 const og = require('../../modules/og');
-const { classifier } = require('../../modules');
-const { checkToken } = require('../../modules');
+const { classifier, checkToken, handleException } = require('../../modules');
 
 module.exports = {
   post: async (req, res) => {
@@ -26,8 +25,13 @@ module.exports = {
       var enc_url = encodeURI(rurl).replace(/%25/g, '%');
       //* 카테고리 분석
       console.time('카테고리 분석');
-      const category = () => classifier(req.body.url);
-      const { result, analysis } = await category();
+      let getClassifierResult;
+      if (typeof handleException(url) === 'string') {
+        getClassifierResult = await classifier(url);
+      } else {
+        getClassifierResult = handleException(url);
+      }
+      const { result, analysis } = getClassifierResult;
       console.timeEnd('카테고리 분석');
       //* og 분석
       const ogt = await og.getOgData(enc_url, (err, ogt) => {
@@ -83,6 +87,7 @@ module.exports = {
         console.timeEnd('send_og');
       }
     } catch (err) {
+      console.log(err);
       return res.status(400).send('bad request');
     }
   },

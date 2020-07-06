@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
-const { users } = require('../models');
+const { users } = require('../../models');
 let updateToken = async (payload) => {
   const { sub, email } = payload;
 
