@@ -13,6 +13,8 @@ router.patch('/profile', usersController.profile.patch);
 
 router.patch('/mypage', usersController.mypage.patch);
 
+router.delete('/mypage', usersController.mypage.delete);
+
 router.post('/oauth', usersController.oauth.post);
 
 router.post('/oauth_1', usersController.oauth_1.post);

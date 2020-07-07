@@ -40,7 +40,10 @@ const getNewLabel = (data) => {
     return 10;
   } else if (label[1] === 'home and garden') {
     return 11;
-  } else if (label[1] === 'law, govt and politics') {
+  } else if (
+    label[1] === 'law, govt and politics' &&
+    labal[2] !== 'armed forces'
+  ) {
     return 12;
   } else if (label[1] === 'news') {
     return 13;
@@ -48,7 +51,10 @@ const getNewLabel = (data) => {
     return 14;
   } else if (label[1] === 'religion and spirituality') {
     return 15;
-  } else if (label[1] === 'technology and computing') {
+  } else if (
+    label[1] === 'technology and computing' ||
+    label[2] === 'armed forces'
+  ) {
     return 16;
   } else if (label[1] === 'science') {
     return 17;
