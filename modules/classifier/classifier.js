@@ -32,7 +32,7 @@ const getOldCategory = async (params) => {
 };
 
 //# oldCategory를 받아 newCategory를 return하는 함수
-let getNewCategory = (oldCategory) => {
+const getNewCategory = (oldCategory) => {
   let analysis = oldCategory.result.categories;
   let category_id;
   if (analysis.length === 0 || analysis[0].score < 0.6) {

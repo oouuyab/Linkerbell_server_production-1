@@ -38,4 +38,32 @@ module.exports = {
       res.status(404).end('please_signin');
     }
   },
+  delete: (req, res) => {
+    try {
+      console.log(req.cookies.session_id);
+      if (req.cookies.session_id) {
+        if (!req.cookies.token) {
+          res.status(404).end('please_signin');
+        }
+        console.log(req.cookies.token);
+        const token_info = checkToken(req);
+
+        console.log(token_info);
+        const user_id = token_info.user_id;
+
+        users.destroy({ where: { id: user_id } }).then((result) => {
+          if (!result) {
+            res.status(400).send('bad request');
+          }
+          res.status(200).send('삭제되었습니다.');
+        });
+      } else {
+        res.status(404).end('please_signin');
+      }
+    } catch (err) {
+      console.log('delete user err');
+      console.log(err);
+      res.status(400).send('bad request');
+    }
+  },
 };
