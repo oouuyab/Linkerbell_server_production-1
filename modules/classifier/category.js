@@ -1,9 +1,10 @@
-const category = (arr) => {
+//# watson API 결과를 받아서 {result:, analysis:[]형태로 리턴}
+const getCategory = (arr) => {
   let newResult = [];
   for (let i = 0; i < arr.length; i++) {
     let newLabelResult = {};
     newLabelResult.score = arr[i].score;
-    newLabelResult.label = newLabel(arr[i].label);
+    newLabelResult.label = getNewLabel(arr[i].label);
     newResult.push(newLabelResult);
   }
   return newResult;
@@ -12,7 +13,7 @@ const category = (arr) => {
 // ? 쇼핑몰 분석 결과 ['/business and industrial/advertising and marketing']로
 // ? 분석되는 경우가 많았음. 따라서 해당 label을 shopping으로 분류
 
-const newLabel = (data) => {
+const getNewLabel = (data) => {
   const label = data.split('/');
   if (label[1] === 'art and entertainment') {
     return 1;
@@ -63,4 +64,4 @@ const newLabel = (data) => {
   }
 };
 
-module.exports = category;
+module.exports = getCategory;
