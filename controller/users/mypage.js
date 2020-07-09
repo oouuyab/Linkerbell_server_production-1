@@ -15,8 +15,11 @@ module.exports = {
 
       console.log(token_info);
       const id = token_info.user_id;
-      const { password, newPassword } = req.body;
-      console.log(password, newPassword);
+      const { password, newPassword, checkPassword } = req.body;
+      console.log(password, newPassword, checkPassword);
+      if (newPassword !== checkPassword) {
+        return res.status(401).send('check_newPW');
+      }
 
       users.findOne({ where: { id: id } }).then(async (result) => {
         if (result === null) {
@@ -27,7 +30,10 @@ module.exports = {
             var salt = bcrypt.genSaltSync(10);
             const hash = await bcrypt.hash(newPassword, salt);
             console.log(hash);
-            users.update({ password: hash }, { where: { id: id } });
+            users.update(
+              { password: hash, activate: 1 },
+              { where: { id: id } }
+            );
             res.status(200).send('비밀번호 변경 완료');
           } else {
             res.status(401).send('check_pw');

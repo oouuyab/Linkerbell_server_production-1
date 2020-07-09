@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       age: DataTypes.INTEGER,
       gender: DataTypes.INTEGER,
+      activate: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      email_token: DataTypes.STRING(1000),
     },
     {
       hooks: {
