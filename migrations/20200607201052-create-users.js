@@ -23,6 +23,13 @@ module.exports = {
       gender: {
         type: Sequelize.INTEGER,
       },
+      activate: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+      email_token: {
+        type: Sequelize.STRING(1000),
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

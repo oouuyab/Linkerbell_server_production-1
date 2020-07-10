@@ -8,7 +8,6 @@ const metascraper = require('metascraper')([
   require('metascraper-image')(),
   require('metascraper-title')(),
 ]);
-const got = require('got');
 const charset = require('charset');
 
 exports.getOgData = async (data_url, cb) => {

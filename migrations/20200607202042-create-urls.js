@@ -18,7 +18,7 @@ module.exports = {
         },
       },
       url: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1000),
         allowNull: false,
       },
       category_id: {
@@ -38,7 +38,7 @@ module.exports = {
         allowNull: false,
       },
       og_image: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1000),
         allowNull: false,
       },
       og_description: {

@@ -42,6 +42,9 @@ module.exports = {
           }
           if (result.password) {
             if (bcrypt.compareSync(password, result.password)) {
+              if (result.activate === 0) {
+                return res.status(401).send('이메일 인증을 완료해 주세요');
+              }
               const user_info = addToken(result.dataValues);
               //const token = enToken(user_info);
               req.session.id = result.dataValues.id;
