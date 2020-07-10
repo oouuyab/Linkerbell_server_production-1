@@ -6,27 +6,18 @@ module.exports = {
   post: (req, res) => {
     //* 자동 로그인
     if (Object.keys(req.body).length === 0) {
-      if (req.cookies.session_id) {
-        if (!req.cookies.token) {
-          res.status(404).end('please_signin');
-        }
-        console.log(req.cookies.token);
-        const token_info = checkToken(req);
-        console.log(token_info);
-        const { user_id, email, isOauth } = token_info;
-        //const token = enToken(req.cookies);
-        res.status(200).json({
-          user_id: user_id,
-          email: email,
-          token: req.cookies.token,
-          isOauth: isOauth,
-          autoLogin: 1,
-        });
-      } else if (!req.cookies.session_id) {
+      if (!req.cookies.token) {
         res.status(404).end('please_signin');
-      } else {
-        res.status(404).end();
       }
+      const token_info = checkToken(req);
+      const { user_id, email, isOauth } = token_info;
+      res.status(200).json({
+        user_id: user_id,
+        email: email,
+        token: req.cookies.token,
+        isOauth: isOauth,
+        autoLogin: 1,
+      });
     } else {
       //* 일반 로그인
       const { email, password } = req.body;
@@ -46,12 +37,8 @@ module.exports = {
                 return res.status(401).send('이메일 인증을 완료해 주세요');
               }
               const user_info = addToken(result.dataValues);
-              //const token = enToken(user_info);
-              req.session.id = result.dataValues.id;
-              console.log(user_info);
               res
                 .status(200)
-                .cookie('session_id', req.session.id)
                 .cookie('token', user_info)
                 .json({
                   user_id: result.dataValues.id,
@@ -67,7 +54,9 @@ module.exports = {
           }
         })
         .catch((err) => {
-          res.status(404).send(err);
+          console.log('signin err');
+          console.log(err);
+          res.status(404).send('bad requrest');
         });
     }
   },

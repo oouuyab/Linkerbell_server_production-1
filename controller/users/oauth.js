@@ -39,8 +39,10 @@ module.exports = {
         }
       };
       verify();
-    } catch {
-      res.status(400).send('please_signin');
+    } catch (err) {
+      console.log('oauth err');
+      console.log(err);
+      res.status(404).send('bad request');
     }
   },
 };

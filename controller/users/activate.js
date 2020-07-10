@@ -37,7 +37,9 @@ module.exports = {
           });
       })
       .catch((err) => {
-        res.status(404).send(err);
+        console.log('activate err');
+        console.log(err);
+        res.status(404).send('bad request');
       });
   },
 };

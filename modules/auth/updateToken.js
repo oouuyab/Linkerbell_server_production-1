@@ -8,8 +8,8 @@ let updateToken = async (payload) => {
 
   let userInfo = { user_id: findEmail.dataValues.id, email, sub, isOauth: 1 }; //사용자 정보
   let options = { expiresIn: '7d', issuer: 'Linkerbell' };
-
-  userInfo.token = jwt.sign(userInfo, process.env.JWTSECRETKEY, options);
+  let encodedUserInfo = { token: entoken(userInfo) };
+  userInfo.token = jwt.sign(encodedUserInfo, process.env.JWTSECRETKEY, options);
   return userInfo.token;
 };
 module.exports = updateToken;

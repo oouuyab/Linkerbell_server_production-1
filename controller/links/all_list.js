@@ -4,7 +4,6 @@ const { checkToken } = require('../../modules');
 module.exports = {
   get: async (req, res) => {
     try {
-      console.time('all-list');
       const token_info = checkToken(req);
       const { user_id } = token_info;
       const findUrls = await urls.findAll({
@@ -13,7 +12,6 @@ module.exports = {
         },
       });
       let lists = [];
-      console.time('tag');
       const unflatted = await Promise.all(
         findUrls.map(async (list) => {
           const url_id = list.dataValues.id;
@@ -30,8 +28,6 @@ module.exports = {
           tag_list.push(tag);
         }
       });
-      console.timeEnd('tag');
-      console.timeEnd('all-list');
       res.status(200).json({ lists: lists, tag_list: tag_list });
       findUrls.forEach((list) => {
         let id = list.dataValues.id;

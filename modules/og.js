@@ -13,7 +13,6 @@ const charset = require('charset');
 exports.getOgData = async (data_url, cb) => {
   let og = {};
   let fixed_url = '';
-  console.log('getogdata');
   try {
     //페이스북 그래프 API 탐색기
     const facebook = async (fb_url) => {
@@ -26,10 +25,8 @@ exports.getOgData = async (data_url, cb) => {
           access_token: process.env.FB_OG_API_TOKEN,
         },
         function (fb) {
-          console.time('fb api');
           if (!fb) {
             var no_og = { og_title: data_url };
-            console.timeEnd('fb api');
             return cb('fb api connection error', no_og);
           }
           let img;
@@ -40,8 +37,6 @@ exports.getOgData = async (data_url, cb) => {
             og_description: fb.description || '',
           };
           og = fb_og;
-          console.log('fb og->og', og);
-          console.timeEnd('fb api');
           return cb(null, og);
         }
       );
@@ -71,13 +66,10 @@ exports.getOgData = async (data_url, cb) => {
         //! 분기 : naver Post 인지 판단
         let iframeUrl;
         if (url.indexOf('https://m.blog.naver.com') > -1) {
-          console.log('naver blog - mobile');
           iframeUrl = 'https://m.blog.naver.com' + $('iframe').attr('src');
         } else if (url.indexOf('https://blog.naver.com') > -1) {
-          console.log('naver blog - mobile');
           iframeUrl = 'https://blog.naver.com' + $('iframe').attr('src');
         }
-        console.log(iframeUrl);
         return req_og(iframeUrl);
       });
     };
@@ -96,7 +88,6 @@ exports.getOgData = async (data_url, cb) => {
         },
         async function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            console.time('req ogt');
             const encode = charset(response.headers, body);
             if (!encode) {
               metascrap(data_url);
@@ -139,7 +130,6 @@ exports.getOgData = async (data_url, cb) => {
               }
             });
             if (!ogTitle || !ogImage) {
-              console.timeEnd('req ogt');
               metascrap(data_url);
             } else {
               var r_og = {
@@ -148,13 +138,10 @@ exports.getOgData = async (data_url, cb) => {
                 og_description: ogDesc || '',
               };
               og = r_og;
-              console.log('req og->og', og);
-              console.timeEnd('req ogt');
               return cb(error, og);
             }
           } else {
             var no_og = { og_title: data_url };
-            console.timeEnd('req ogt');
             return cb('req og error', no_og);
           }
         }
@@ -183,7 +170,6 @@ exports.getOgData = async (data_url, cb) => {
     });
 
     const metascrap = async (meta_url) => {
-      console.time('metascrap og');
       const { data: html } = await axios
         .request({
           method: 'GET',
@@ -196,12 +182,12 @@ exports.getOgData = async (data_url, cb) => {
           },
         })
         .catch((error) => {
+          console.log('metascrap err');
           console.log(error);
           return { data: '' };
         });
       const metadata = await metascraper({ html, url: data_url });
       if (!metadata || metadata.title === null || metadata.image === null) {
-        console.timeEnd('metascrap og');
         facebook(data_url);
       } else {
         if (metadata.title.includes('$t') || metadata.title.includes('\\')) {
@@ -216,8 +202,6 @@ exports.getOgData = async (data_url, cb) => {
           og_description: metadata.description || '',
         };
         og = meta_og;
-        console.log('meta og->og', og);
-        console.timeEnd('metascrap og');
         return cb(null, og);
       }
     };

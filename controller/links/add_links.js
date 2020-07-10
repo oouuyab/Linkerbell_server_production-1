@@ -19,12 +19,10 @@ module.exports = {
       if (findUrl.length !== 0) {
         return res.status(409).send('이미 존재하는 url입니다.');
       }
-      // xss
+      //* xss
       var rurl = xss(url);
-      // 한글 입력시 url 인코딩
       var enc_url = encodeURI(rurl).replace(/%25/g, '%');
       //* 카테고리 분석
-      console.time('카테고리 분석');
       let getClassifierResult;
       if (typeof handleException(url) === 'string') {
         getClassifierResult = await classifier(url);
@@ -32,13 +30,11 @@ module.exports = {
         getClassifierResult = handleException(url);
       }
       const { result, analysis } = getClassifierResult;
-      console.timeEnd('카테고리 분석');
       //* og 분석
       const ogt = await og.getOgData(enc_url, (err, ogt) => {
         send_og(ogt);
       });
       function send_og(og) {
-        console.time('send_og');
         !og.og_title ? (og.og_title = enc_url) : console.log('title exist');
         if (url.length > 40) {
           const parameter = enc_url.indexOf('?');
@@ -84,9 +80,9 @@ module.exports = {
                 .send({ link_data: { ...data }, analysis: analysis });
             }
           });
-        console.timeEnd('send_og');
       }
     } catch (err) {
+      console.log('add_links err');
       console.log(err);
       return res.status(400).send('bad request');
     }
@@ -106,6 +102,8 @@ module.exports = {
           res.status(201).send('삭제되었습니다.');
         });
     } catch (err) {
+      console.log('delete err');
+      console.log(err);
       res.status(400).send('bad request');
     }
   },

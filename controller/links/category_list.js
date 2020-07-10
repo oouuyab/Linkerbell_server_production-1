@@ -41,6 +41,7 @@ module.exports = {
         urls.update({ isnew: 0 }, { where: { id: id } });
       });
     } catch (err) {
+      console.log('category_list err');
       console.log(err);
       res.status(400).end('bad request');
     }

@@ -26,7 +26,6 @@ module.exports = {
           }
         )
         .then((result) => {
-          console.log(result);
           sendEmail.sendResetPasswordMail({
             email: email,
             temp_pw: temp_pw,
@@ -34,6 +33,8 @@ module.exports = {
           res.status(201).send('send email');
         })
         .catch((err) => {
+          console.log('find_pw err');
+          console.log(err);
           res.status(400).send('bad request');
         });
     });
