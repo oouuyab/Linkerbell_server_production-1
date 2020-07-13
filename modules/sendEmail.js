@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-let link = 'http://localhost';
+let link = 'http://13.125.223.179';
 let team_account = 'linkerbell.team7000@gmail.com';
 
 const transport = nodemailer.createTransport({
