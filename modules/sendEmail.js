@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-let link = 'http://localhost:7000';
+let link = 'http://localhost';
 let team_account = 'linkerbell.team7000@gmail.com';
 
 const transport = nodemailer.createTransport({
@@ -21,7 +21,7 @@ exports.sendSignupMail = async (user_data) => {
       아래 링크를 클릭하시면 회원가입이 완료됩니다.
       <br/>
       <br/>
-      <b>${link}/users/activate/${user_data.email_token}</b>
+      <a href = ${link}/users/activate/${user_data.email_token}>링커벨 회원가입 인증 링크</a>
       <br/><br/>
       감사합니다.`,
   };

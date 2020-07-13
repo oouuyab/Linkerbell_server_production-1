@@ -4,19 +4,10 @@ var sqlinjection = require('sql-injection');
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const usersRouter = require('./routes/users');
 const linksRouter = require('./routes/links');
-
-app.use(
-  session({
-    secret: '#linkerbell#',
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 
 app.use(cookieParser());
 
@@ -42,7 +33,7 @@ app.use('/users', usersRouter);
 app.use('/links', linksRouter);
 
 app.listen(7000, function () {
-  console.log('Example app listening on port!');
+  console.log('Welcome to Linkerbell!');
 });
 
 app.use((req, res, next) => {

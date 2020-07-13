@@ -51,6 +51,7 @@ module.exports = {
         }
       })
       .catch((err) => {
+        console.log('oauth_1 err');
         console.log(err);
         res.status(404).send('please_signin');
       });

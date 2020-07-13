@@ -13,14 +13,13 @@ module.exports = {
           { where: { id: url_id } }
         )
         .then((result) => {
-          console.log(`url_id: ${url_id}, favorite: ${favorite} 설정 완료`);
-        })
-        .then(() => {
           res
             .status(200)
             .end(`url_id: ${url_id}, favorite: ${favorite} 설정 완료`);
         });
     } catch (err) {
+      console.log('favorite err');
+      console.log(err);
       res.status(400).end('bad request');
     }
   },

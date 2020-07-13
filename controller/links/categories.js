@@ -4,7 +4,6 @@ module.exports = {
   patch: (req, res) => {
     req.body;
     const { url_id, category_id } = req.body;
-    console.log(category_id, url_id);
     urls
       .update(
         {
@@ -20,6 +19,8 @@ module.exports = {
         res.status(200).send('category 수정이 완료되었습니다.');
       })
       .catch((err) => {
+        console.log('categories err');
+        console.log(err);
         res.status(400).send('bad request');
       });
   },

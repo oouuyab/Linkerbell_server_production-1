@@ -9,4 +9,5 @@ module.exports = {
   cheerio: require('./classifier/cheerio'),
   handleException: require('./classifier/handleException'),
   og: require('./og'),
+  sendEmail: require('./sendEmail'),
 };

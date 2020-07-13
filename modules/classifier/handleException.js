@@ -1,5 +1,4 @@
 const handleException = (url) => {
-  console.log('handleException');
   try {
     if (
       //! 쿠팡

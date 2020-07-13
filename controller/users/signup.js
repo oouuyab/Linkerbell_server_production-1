@@ -1,5 +1,5 @@
 const { users } = require('../../models');
-const sendEmail = require('../../modules/sendEmail');
+const { sendEmail, enToken } = require('../../modules/');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -19,7 +19,8 @@ module.exports = {
           return res.status(409).send('이미 존재하는 이메일 주소입니다.');
         }
         const data = user.get({ plain: true });
-        let token = jwt.sign(data, process.env.JWTSECRETKEY);
+        const encodedData = enToken(data);
+        let token = jwt.sign(encodedData, process.env.JWTSECRETKEY);
         await users
           .update(
             {
@@ -36,6 +37,8 @@ module.exports = {
             res.status(201).json({ user_id: data.id });
           })
           .catch((err) => {
+            console.log('signup err');
+            console.log(err);
             res.status(400).send('bad request');
           });
       });

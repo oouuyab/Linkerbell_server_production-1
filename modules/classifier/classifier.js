@@ -48,13 +48,10 @@ const getNewCategory = (oldCategory) => {
 
 //. classifier 함수
 const classifier = async (url) => {
-  console.time('classifier');
   try {
-    console.timeEnd('classifier');
     const params = await getParams(url);
     const oldCategory = await getOldCategory(params);
     const newCategory = await getNewCategory(oldCategory);
-    console.log(newCategory);
     return newCategory;
   } catch (err) {
     console.log('classifier err');

@@ -50,6 +50,10 @@ module.exports = {
       .then((result) => {
         return res.status(200).json(result);
       })
-      .catch((err) => res.status(404).send(err));
+      .catch((err) => {
+        console.log('home err');
+        console.log(err);
+        res.status(404).send(err);
+      });
   },
 };

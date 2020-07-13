@@ -4,16 +4,12 @@ const Iconv = require('iconv-lite');
 const charset = require('charset');
 
 const cheerio = async (url) => {
-  console.log('cheerio 실행');
-  console.time('cheerio');
   try {
     //* 0. getIframeUrl 에러로 url이 ''로 왔을 경우
     if (url === '') {
-      console.timeEnd('cheerio');
       return '';
     }
     //* 1. axios로 url에 get 요첨을 보냄
-    console.log(`url: ${url}`);
     const getHtml = async () => {
       const opt = {
         method: 'get',
@@ -35,7 +31,6 @@ const cheerio = async (url) => {
       //* 2-3 getText: body tag의 text 가져오기
       //! 분기 : naver Post 인지 판단
       if ($('head').html().indexOf('post.naver.com/') > -1) {
-        console.log('naver post');
         innerText.push(
           $('body')
             .html()
@@ -46,25 +41,18 @@ const cheerio = async (url) => {
         );
       } else {
         if (url.indexOf('twitter.com/') > -1) {
-          console.log($('meta[property="og:title"]').attr('content'));
-          console.timeEnd('cheerio');
           return '';
         }
         //! 분기 : <iframe></iframe> 이 있는지 판단
         if ($('body').html().indexOf('mainFrame') > -1) {
-          console.log('mainFrame 있음');
           let iframeUrl;
           if (url.indexOf('https://m.blog.naver.com') > -1) {
-            console.log('naver blog - mobile');
             iframeUrl = 'https://m.blog.naver.com' + $('iframe').attr('src');
           } else if (url.indexOf('https://blog.naver.com') > -1) {
-            console.log('naver blog - web');
             iframeUrl = 'https://blog.naver.com' + $('iframe').attr('src');
           }
-          console.log(`iframeUrl: ${iframeUrl}`);
           return cheerio(iframeUrl);
         } else {
-          console.log('mainFrame 없음');
           innerText.push(
             $('body')
               .text()
@@ -74,12 +62,10 @@ const cheerio = async (url) => {
       }
       return innerText.join('').slice(0, 15000);
     });
-    console.timeEnd('cheerio');
     return text;
   } catch (err) {
     console.log('cheerio err');
     console.log(err);
-    console.timeEnd('cheerio');
     return '';
   }
 };
