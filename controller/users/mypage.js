@@ -13,7 +13,7 @@ module.exports = {
     const id = token_info.user_id;
     const { password, newPassword, checkPassword } = req.body;
     if (newPassword !== checkPassword) {
-      return res.status(401).send('check_newPW');
+      return res.status(403).send('check_newPW');
     }
 
     users.findOne({ where: { id: id } }).then(async (result) => {

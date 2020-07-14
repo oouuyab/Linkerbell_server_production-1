@@ -34,7 +34,7 @@ module.exports = {
           if (result.password) {
             if (bcrypt.compareSync(password, result.password)) {
               if (result.activate === 0) {
-                return res.status(401).send('이메일 인증을 완료해 주세요');
+                return res.status(403).send('check_email_verification');
               }
               const user_info = addToken(result.dataValues);
               res
@@ -43,6 +43,7 @@ module.exports = {
                 .json({
                   user_id: result.dataValues.id,
                   email: result.dataValues.email,
+                  activate: result.dataValues.activate,
                   token: user_info,
                   isOauth: 0,
                   autoLogin: 0,
