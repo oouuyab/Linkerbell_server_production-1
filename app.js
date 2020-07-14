@@ -8,6 +8,9 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const usersRouter = require('./routes/users');
 const linksRouter = require('./routes/links');
+const helmet = require('helmet');
+
+app.use(helmet());
 
 app.use(cookieParser());
 
