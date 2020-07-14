@@ -9,6 +9,9 @@ module.exports = {
       if (result === null) {
         return res.status(401).send('check_email');
       }
+      if (result.activate === 0) {
+        return res.status(403).send('check_email_verification');
+      }
       let temp_pw = Math.random().toString(36).slice(2);
       let salt = bcrypt.genSaltSync(10);
       const hash = await bcrypt.hash(temp_pw, salt);
