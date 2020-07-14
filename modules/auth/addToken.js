@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
-const entoken = require('./entoken');
+const entoken = require('./enToken');
 let addToken = (result) => {
   const { id, email } = result;
   let isOauth;
