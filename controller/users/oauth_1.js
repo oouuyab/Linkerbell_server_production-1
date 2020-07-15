@@ -20,34 +20,23 @@ module.exports = {
           //? 처음 가입 -> 바로 로그인 처리
           const data = await user.get({ plain: true });
           const newData = { ...data, isOauth: 1 };
-          console.log(newData);
-          const user_info = addToken({ ...data, isOauth: 1 });
-          req.session.id = data.id;
-          res
-            .status(200)
-            .cookie('session_id', req.session.id)
-            .cookie('token', user_info)
-            .json({
-              user_id: data.id,
-              email: data.email,
-              isOauth: 1,
-              autoLogin: 0,
-            });
+          const user_info = addToken(newData);
+          res.status(200).cookie('token', user_info).json({
+            user_id: data.id,
+            email: data.email,
+            isOauth: 1,
+            autoLogin: 0,
+          });
         } else {
           //? 이미 가입
           const newData = { ...user.dataValues, isOauth: 1 };
           const user_info = addToken(newData);
-          req.session.id = user.dataValues.id;
-          res
-            .status(200)
-            .cookie('session_id', req.session.id)
-            .cookie('token', user_info)
-            .json({
-              user_id: user.dataValues.id,
-              email: newData.email,
-              isOauth: 1,
-              autoLogin: 0,
-            });
+          res.status(200).cookie('token', user_info).json({
+            user_id: user.dataValues.id,
+            email: newData.email,
+            isOauth: 1,
+            autoLogin: 0,
+          });
         }
       })
       .catch((err) => {
