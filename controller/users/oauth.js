@@ -14,28 +14,28 @@ module.exports = {
             idToken: it,
           });
           const payload = ticket.getPayload();
-          const userid = payload[process.env.GOOGLE_OAUTH_KEY]; //21자리의 google 회원 id 번호
-
+          let id;
           const email = payload.email;
 
-          const findEmail = await users.findAll({ where: { email: email } });
+          const findEmail = await users.findOne({ where: { email: email } });
           let token = '';
-          if (findEmail.length === 0) {
+          if (findEmail === null) {
             token = await addOauthToken(payload);
-            console.log(token);
+            id = token.id;
           } else {
             token = await updateToken(payload);
-            console.log(token);
+            id = findEmail.dataValues.id;
           }
-          console.log(findEmail.dataValues.id);
           return res.status(200).cookie('token', token).json({
-            user_id: findEmail.dataValues.id,
+            user_id: id,
             token: token,
             isOauth: 1,
             autoLogin: 0,
           });
         } catch (err) {
-          res.status(400).send('please_signin');
+          console.log('oauth verify err');
+          console.log(err);
+          res.status(400).send('bad request');
         }
       };
       verify();
