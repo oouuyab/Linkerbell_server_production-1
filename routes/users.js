@@ -23,4 +23,6 @@ router.get('/activate/:token', usersController.activate.patch);
 
 router.post('/help', usersController.find_pw.post);
 
+router.get('/privacy_policy', usersController.privacy_policy.get);
+
 module.exports = router;

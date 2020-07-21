@@ -8,4 +8,5 @@ module.exports = {
   oauth_1: require('./oauth_1'),
   activate: require('./activate'),
   find_pw: require('./find_pw'),
+  privacy_policy: require('./privacy_policy'),
 };
