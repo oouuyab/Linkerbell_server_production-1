@@ -42,7 +42,7 @@ const getNewLabel = (data) => {
     return 11;
   } else if (
     label[1] === 'law, govt and politics' &&
-    labal[2] !== 'armed forces'
+    label[2] !== 'armed forces'
   ) {
     return 12;
   } else if (label[1] === 'news') {
