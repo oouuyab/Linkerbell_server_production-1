@@ -56,7 +56,6 @@ const classifier = async (url) => {
   } catch (err) {
     console.log('classifier err');
     console.log(err);
-    console.timeEnd('classifier');
     return { result: 21, analysis: [{ score: 0, label: '/etc' }] };
   }
 };
