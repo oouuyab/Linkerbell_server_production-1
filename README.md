@@ -1,7 +1,8 @@
 # Linkerbell
 
-[구글 플레이 스토어](https://play.google.com/store/apps/details?id=com.team7000.linkerbell&hl=ko)
-[Notion 문서]()
+[구글 플레이 스토어](https://bit.ly/39C9XNo)
+
+[Notion 문서](https://bit.ly/332wtxS)
 
 **나중에 읽고 싶은 글은 많고 저장된 링크들은 정리 안된 채로 쌓여 있지 않나요?**
 링크를 찾기도 너무 어렵죠? 하지만 걱정하지 마세요!
