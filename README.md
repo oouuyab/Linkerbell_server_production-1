@@ -1,6 +1,6 @@
 # Linkerbell
 
-[구글 플레이 스토어](https://bit.ly/39C9XNo)
+구글 플레이 스토어 출시 준비중!
 
 [Notion 문서](https://bit.ly/332wtxS)
 
